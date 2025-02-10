@@ -1,13 +1,13 @@
 export default function AppAcomplishmentContent() {
   return (
     <section className="flex flex-col items-center mt-28">
-      <div className="flex justify-center mb-10 border-pink-500 w-[80%] sm:w-[60%] md:w-[65%] lg:w-[55%] xl:w-[40%]  border-b-2 pb-2">
+      <div className="flex justify-center lg:mb-20 mb-10 border-pink-500 w-[80%] sm:w-[60%] md:w-[65%] lg:w-[55%] xl:w-[40%]  border-b-2 pb-2">
         <h1 className="font-raleway text-2xl sm:text-3xl md:text-4xl pb-3 text-center hover:scale-105 transition-transform duration-200 ease-in-out inline-block mx-auto dark:text-dark-200">
           Our accomplishments so far
         </h1>
       </div>
       <div className="lg:w-[90%] xl:w-[85%]">
-        <div className="flex flex-col items-center mb-12 mt-10">
+        <div className="flex flex-col items-center mb-12 lg:mt-10">
           <h1 className="text-3xl font-semibold font-montserrat md:text-5xl dark:text-dark-100">
             Total five star ratings
           </h1>

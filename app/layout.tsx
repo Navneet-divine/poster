@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-
-import Header from "@/components/Header";
 import { ThemeProvider } from "next-themes";
 
 import {
@@ -34,8 +32,7 @@ export default function RootLayout({
         />
       </head>
       <body className="dark:bg-dark-700">
-        <ThemeProvider    attribute="class">
-          <Header />
+        <ThemeProvider attribute="class">
           <MantineProvider>{children}</MantineProvider>
         </ThemeProvider>
       </body>

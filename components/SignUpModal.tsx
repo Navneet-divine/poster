@@ -10,7 +10,7 @@ const SignUpModal: React.FC<{
       opened={opened}
       onClose={close}
       title="Excited to start a journey with you!"
-      className="font-raleway dark:bg-dark-500"
+      className="font-raleway !dark:bg-dark-600"
       styles={{
         title: {
           fontWeight: "bold",

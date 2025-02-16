@@ -19,7 +19,7 @@ export default function Header() {
   }
 
   return (
-    <div className="flex top-0 z-50 sticky w-full bg-white dark:bg-dark-700 justify-between items-center border border-t-0 border-l-0 border-r-0 border-b-2 p-3 dark:border-dark-500">
+    <div className="flex top-0 z-50 fixed w-full bg-white dark:bg-dark-700 justify-between items-center border border-t-0 border-l-0 border-r-0 border-b-2 p-3 dark:border-dark-500">
       <div>
         <img src="/imgs/favicon.ico" alt="Logo" />
       </div>

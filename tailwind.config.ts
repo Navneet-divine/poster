@@ -15,6 +15,7 @@ const config = {
         raleway: ["Raleway", "sans-serif"],
         merriweather: ["Merriweather", "serif"],
         dancingScript: ["Dancing Script", "cursive"],
+        inter: ["Inter", "sans-serif"],
       },
       colors: {
         dark: {

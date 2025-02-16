@@ -235,7 +235,6 @@ export default function AppHeroContent() {
     }
 
     try {
-      // Send login request
       const res = await axios.post("/api/auth/login", { email, password });
 
       closeLogin();
@@ -269,7 +268,7 @@ export default function AppHeroContent() {
           </div>
 
           <div>
-            <SignUpModal opened={registerOpened} close={closeRegister} >
+            <SignUpModal opened={registerOpened} close={closeRegister}>
               <form onSubmit={handleRegister}>
                 <div className="flex max-sm:gap-8 justify-between">
                   <div>
@@ -285,7 +284,6 @@ export default function AppHeroContent() {
                       styles={{
                         label: { fontWeight: "bold" },
                       }}
-                     
                     />
                   </div>
 

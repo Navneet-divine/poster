@@ -255,7 +255,7 @@ export default function AppHeroContent() {
 
   return (
     <>
-      <div className="flex pl-3 md:pl-4 lg:pl-6">
+      <div className="flex pl-3 md:pl-4 lg:pl-6 mt-20">
         <div>
           <div className="uppercase font-montserrat font-bold mt-10 md:mt-16 text-5xl sm:text-7xl lg:text-8xl xl:text-7xl">
             <h1 className="text-pink-500">Post Your Posts</h1>

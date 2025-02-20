@@ -47,6 +47,9 @@ const config = {
       "2xl": "1536px",
     },
   },
+  corePlugins: {
+    preflight: true, // This is important to prevent Tailwind from conflicting with Mantine
+  },
 } satisfies Config;
 
 export default config;

@@ -7,9 +7,7 @@ import MainContent from "@/components/UI/MainContent";
 import Footer from "@/components/UI/Footer";
 
 export default function Dashboard() {
-  async function logout() {
-    await axios.get("/api/auth/logout");
-  }
+ 
 
   return (
     <>

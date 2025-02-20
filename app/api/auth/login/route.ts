@@ -4,9 +4,6 @@ import User from "@/models/userModel";
 import bcryptjs from "bcryptjs"
 import { signJwt } from "@/utils/tokenUtils";
 
-import jwt from 'jsonwebtoken';
-
-
 
 
 connectDB();

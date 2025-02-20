@@ -8,7 +8,7 @@ import { FaHome } from "react-icons/fa";
 import { RiImageAddLine } from "react-icons/ri";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { MdPeople } from "react-icons/md";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 
 const navBar = [
@@ -33,12 +33,15 @@ interface User {
 }
 
 export default function Sidebar() {
+  const router = useRouter();
   const pathName = usePathname();
   const [user, setUser] = useState<User | null>(null);
 
   async function handleLogout() {
     try {
       await axios.get("/api/auth/logout");
+
+      router.push("/");
     } catch (error) {
       console.error("Error logging out:", error);
       alert("Logout failed. Please try again later.");
@@ -92,8 +95,8 @@ export default function Sidebar() {
         <Link href="/profile">
           <div className="flex items-center w-full p-2 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-transparent">
             <div className="flex items-center justify-center font-bold text-white rounded-full h-12 w-12 bg-pink-500">
-              {user?.firstName?.[0] ?? ""}
-              {user?.lastName?.[0] ?? ""}
+              {user?.firstName?.[0].toUpperCase() ?? ""}
+              {user?.lastName?.[0].toUpperCase() ?? ""}
             </div>
             <div className="ml-3 flex-1">
               <p className="text-lg font-semibold dark:text-dark-50">

@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { FaUserEdit } from "react-icons/fa";
 import Header from "@/components/Header";
 import Sidebar from "@/components/UI/Sidebar";
 import MainContent from "@/components/UI/MainContent";
 import Footer from "@/components/UI/Footer";
-import { CgProfile } from "react-icons/cg";
 import { Button, PasswordInput, TextInput, Skeleton } from "@mantine/core";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 interface User {
   firstName?: string;
@@ -17,13 +17,10 @@ interface User {
   avatar?: string;
 }
 
-interface Blog {
-  _id: string;
-  title: string;
-  createdAt: string;
-}
-
 const Profile: React.FC = () => {
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const { theme } = useTheme();
   const [user, setUser] = useState<User | null>(null);
   const [userDetails, setUserDetails] = useState<{
     firstName: string;
@@ -56,21 +53,57 @@ const Profile: React.FC = () => {
     fetchProfileData();
   }, []);
 
+  async function handleEditProfile(event: React.FormEvent) {
+    event.preventDefault();
+    const formData = new FormData(event.target as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const res = await axios.post("/api/users/edit-profile", data);
+    } catch (e: any) {
+      console.log(e.message);
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      const res = await axios.get("/api/auth/logout");
+      router.push("/");
+    } catch (e: any) {
+      console.log(e.message);
+    }
+  }
+
+  function handleClickProfile() {
+    inputFileRef.current?.click();
+  }
+
   return (
     <>
       <Header />
       <Sidebar />
       <MainContent>
         <div className="w-full min-h-screen p-5 pb-[5rem] ">
-          <div className="flex max-md:justify-center w-full md:mt-10 mb-16 ">
-            <div className="flex max-md:flex-col items-center ">
+          <div className="flex max-md:justify-center w-full md:mt-10  ">
+            <div className="flex max-md:flex-col items-center">
               {loading ? (
-                <Skeleton height={144} width={144} circle />
+                <Skeleton
+                  height={144}
+                  width={144}
+                  circle
+                  classNames={{ root: "dark:bg-dark-500" }}
+                />
               ) : (
-                <div className="flex items-center justify-center bg-pink-500 rounded-full h-36 w-36 text-2xl text-white font-montserrat hover:cursor-pointer">
-                  {user?.firstName?.[0]}
-                  {user?.lastName?.[0]}
-                </div>
+                <>
+                  <input type="file" className="hidden" ref={inputFileRef} />
+                  <div
+                    onClick={handleClickProfile}
+                    className="flex items-center justify-center bg-pink-500 rounded-full h-36 w-36 text-2xl text-white font-montserrat hover:cursor-pointer"
+                  >
+                    {user?.firstName?.[0].toUpperCase()}
+                    {user?.lastName?.[0].toUpperCase()}
+                  </div>
+                </>
               )}
               <div className="max-md:flex max-md:flex-col max-md:items-center md:ml-4 mt-3 md:mt-0">
                 {loading ? (
@@ -90,13 +123,24 @@ const Profile: React.FC = () => {
               </div>
             </div>
           </div>
+          <div className="md:hidden flex justify-center  mb-14 mt-5">
+            <Button
+              color="red"
+              size="md"
+              onClick={handleLogout}
+              className="font-raleway"
+            >
+              Logout
+            </Button>
+          </div>
+
           <div className="w-full mt-5  ">
             <div>
-              <h1 className="text-2xl text-dark-300  md:text-3xl font-raleway mb-3">
+              <h1 className="text-2xl text-dark-100  md:text-3xl font-raleway mb-3">
                 CHANGE PASSWORD
               </h1>
             </div>
-            <div className="flex max-md:flex-col p-2 items-centershadow-lg border rounded-md shadow-lg ">
+            <div className="flex max-md:flex-col p-2 items-centershadow-lg border rounded-md shadow-lg  dark:border-dark-500">
               <form className="w-full flex flex-col">
                 <div className="flex flex-col md:flex-row md:gap-4 w-full">
                   {loading ? (
@@ -107,7 +151,14 @@ const Profile: React.FC = () => {
                       name="oldPassword"
                       placeholder="Enter Old Password"
                       autoComplete="off"
-                      className="w-full mt-3"
+                      className="w-full mt-3 dark:text-dark-100"
+                      styles={{
+                        input: {
+                          backgroundColor: theme === "dark" ? "#2d2d2d" : "",
+                          color: theme === "dark" ? "white" : "",
+                          border: theme === "dark" ? "none" : "",
+                        },
+                      }}
                     />
                   )}
                   {loading ? (
@@ -118,7 +169,14 @@ const Profile: React.FC = () => {
                       name="newPassword"
                       placeholder="Enter New Password"
                       autoComplete="off"
-                      className="w-full mt-3"
+                      styles={{
+                        input: {
+                          backgroundColor: theme === "dark" ? "#2d2d2d" : "",
+                          color: theme === "dark" ? "white" : "",
+                          border: theme === "dark" ? "none" : "",
+                        },
+                      }}
+                      className="w-full mt-3 dark:text-dark-100"
                     />
                   )}
                   {loading ? (
@@ -129,7 +187,14 @@ const Profile: React.FC = () => {
                       name="confirmPassword"
                       placeholder="Confirm New Password"
                       autoComplete="off"
-                      className="w-full mt-3"
+                      className="w-full mt-3 dark:text-dark-100"
+                      styles={{
+                        input: {
+                          backgroundColor: theme === "dark" ? "#2d2d2d" : "",
+                          color: theme === "dark" ? "white" : "",
+                          border: theme === "dark" ? "none" : "",
+                        },
+                      }}
                     />
                   )}
                 </div>
@@ -151,19 +216,22 @@ const Profile: React.FC = () => {
           </div>
           <div className="w-full mt-5">
             <div>
-              <h1 className="text-2xl text-dark-300  md:text-3xl font-raleway mb-3">
+              <h1 className="text-2xl text-dark-100  md:text-3xl font-raleway mb-3">
                 CHANGE PROFILE DATA
               </h1>
             </div>
-            <div className="flex max-md:flex-col border shadow-lg rounded-md p-2">
-              <form className="w-full flex flex-col">
+            <div className="flex max-md:flex-col border shadow-lg rounded-md p-2 dark:border-dark-500">
+              <form
+                className="w-full flex flex-col"
+                onSubmit={handleEditProfile}
+              >
                 <div className="flex flex-col md:flex-row md:gap-4 w-full">
                   {loading ? (
                     <Skeleton height={40} width="100%" className="mt-3" />
                   ) : (
                     <TextInput
                       label="First Name"
-                      name="FirstName"
+                      name="firstName"
                       placeholder="Enter"
                       autoComplete="off"
                       value={userDetails.firstName}
@@ -173,7 +241,14 @@ const Profile: React.FC = () => {
                           firstName: e.target.value,
                         })
                       }
-                      className="w-full mt-3"
+                      className="w-full mt-3 dark:text-dark-100"
+                      styles={{
+                        input: {
+                          backgroundColor: theme === "dark" ? "#2d2d2d" : "",
+                          color: theme === "dark" ? "white" : "",
+                          border: theme === "dark" ? "none" : "",
+                        },
+                      }}
                     />
                   )}
                   {loading ? (
@@ -191,7 +266,14 @@ const Profile: React.FC = () => {
                           lastName: e.target.value,
                         })
                       }
-                      className="w-full mt-3"
+                      styles={{
+                        input: {
+                          backgroundColor: theme === "dark" ? "#2d2d2d" : "",
+                          color: theme === "dark" ? "white" : "",
+                          border: theme === "dark" ? "none" : "",
+                        },
+                      }}
+                      className="w-full mt-3 dark:text-dark-100"
                     />
                   )}
                   {loading ? (
@@ -209,7 +291,15 @@ const Profile: React.FC = () => {
                           email: e.target.value,
                         })
                       }
-                      className="w-full mt-3"
+                      className="w-full mt-3 dark:text-dark-100"
+                      style={{ outline: "none" }}
+                      styles={{
+                        input: {
+                          backgroundColor: theme === "dark" ? "#2d2d2d" : "",
+                          color: theme === "dark" ? "white" : "",
+                          border: theme === "dark" ? "none" : "",
+                        },
+                      }}
                     />
                   )}
                 </div>
@@ -220,6 +310,7 @@ const Profile: React.FC = () => {
                     <Button
                       className="text-white px-4 py-2 rounded"
                       color="pink"
+                      type="submit"
                     >
                       Change Details
                     </Button>

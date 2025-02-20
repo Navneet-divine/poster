@@ -4,6 +4,7 @@ import { CgProfile } from "react-icons/cg";
 import Navbar from "../Navbar";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { MdPeople } from "react-icons/md";
+import { BiLogOut } from "react-icons/bi";
 
 const Footer: React.FC = () => {
   return (

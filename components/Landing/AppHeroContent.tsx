@@ -279,6 +279,10 @@ export default function AppHeroContent() {
                       name="firstName"
                       placeholder="First Name"
                       className="mb-3 "
+                      classNames={{
+                        input: "dark:bg-dark-600 dark:border-none dark:text-white",
+                        label: "dark:text-dark-50",
+                      }}
                       autoComplete="off"
                       description="First Name is required"
                       styles={{
@@ -295,6 +299,10 @@ export default function AppHeroContent() {
                       name="lastName"
                       placeholder="Last Name"
                       className="mb-3"
+                      classNames={{
+                        input: "dark:bg-dark-600 dark:border-none dark:text-white",
+                        label: "dark:text-dark-50",
+                      }}
                       autoComplete="off"
                       description="Last Name is required"
                       styles={{
@@ -312,6 +320,10 @@ export default function AppHeroContent() {
                   error={error.email}
                   placeholder="example@example.com"
                   className="mb-3"
+                  classNames={{
+                    input: "dark:bg-dark-600 dark:border-none dark:text-white",
+                    label: "dark:text-dark-50",
+                  }}
                   autoComplete="off"
                   description="Email is required"
                   styles={{
@@ -330,6 +342,10 @@ export default function AppHeroContent() {
                   autoComplete="off"
                   description="Password must be at least 8 characters, contain uppercase, lowercase, a number, and a special character."
                   className="mb-3"
+                  classNames={{
+                    input: "dark:bg-dark-600 dark:border-none dark:text-white",
+                    label: "dark:text-dark-50",
+                  }}
                   styles={{
                     label: {
                       fontWeight: "bold",
@@ -345,6 +361,10 @@ export default function AppHeroContent() {
                   placeholder="Confirm Password"
                   autoComplete="off"
                   className="mb-3"
+                  classNames={{
+                    input: "dark:bg-dark-600 dark:border-none dark:text-white",
+                    label: "dark:text-dark-50",
+                  }}
                   styles={{
                     label: {
                       fontWeight: "bold",
@@ -354,7 +374,7 @@ export default function AppHeroContent() {
 
                 <div className="flex justify-between items-center">
                   <p
-                    className="hover:underline cursor-pointer"
+                    className="hover:underline cursor-pointer dark:text-dark-50 "
                     onClick={switchToLogin}
                   >
                     Have an account? Login
@@ -375,6 +395,10 @@ export default function AppHeroContent() {
                   name="email"
                   placeholder="example@example.com"
                   autoComplete="off"
+                  classNames={{
+                    input: "dark:bg-dark-600 dark:border-none dark:text-white",
+                    label: "dark:text-dark-50",
+                  }}
                   styles={{
                     label: {
                       fontWeight: "bold",
@@ -389,6 +413,12 @@ export default function AppHeroContent() {
                   description="Password must be at least 8 characters, contain uppercase, lowercase, a number, and a special character."
                   placeholder="Password"
                   className="mt-2"
+                  classNames={{
+                    input:
+                      "dark:bg-dark-600 dark:border-none dark:text-white ",
+                    label: "dark:text-dark-50",
+                  
+                  }}
                   autoComplete="off"
                   styles={{
                     label: {
@@ -396,9 +426,10 @@ export default function AppHeroContent() {
                     },
                   }}
                 />
+
                 <div className="flex justify-between items-center mt-3">
                   <p
-                    className="hover:underline cursor-pointer"
+                    className="hover:underline cursor-pointer dark:text-dark-50"
                     onClick={switchToRegister}
                   >
                     Don't have an account? Register

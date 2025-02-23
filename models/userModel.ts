@@ -7,8 +7,6 @@ const userSchema = new Schema({
     firstName: {
         type: String,
         required: true,
-
-
     },
     lastName: {
         type: String,
@@ -20,9 +18,8 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    bgColor: {
-        type: String,
-        enum: ["red", "green", "purple"]
+    avatar:{
+        type:String
     },
     password: {
         type: String,

@@ -9,6 +9,7 @@ import Footer from "@/components/UI/Footer";
 import { Button, PasswordInput, TextInput, Skeleton } from "@mantine/core";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import { Loader } from "@mantine/core";
 
 interface User {
   firstName?: string;
@@ -17,7 +18,34 @@ interface User {
   avatar?: string;
 }
 
+interface FormData {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 const Profile: React.FC = () => {
+  const firstNameRef = useRef<HTMLInputElement | null>(null);
+  const lastNameRef = useRef<HTMLInputElement | null>(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const newPasswordRef = useRef<HTMLInputElement | null>(null);
+  const oldPasswordRef = useRef<HTMLInputElement | null>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement | null>(null);
+
+  const [formData, setFormData] = useState<FormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [avatar, setAvatar] = useState<File | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [avtarLoading, setAvatarLoading] = useState(false);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { theme } = useTheme();
@@ -37,6 +65,7 @@ const Profile: React.FC = () => {
     const fetchProfileData = async () => {
       try {
         const userRes = await axios.get("/api/users/current-user");
+        console.log(userRes);
         setUser(userRes.data.user);
         setUserDetails({
           firstName: userRes.data.user.firstName || "",
@@ -51,17 +80,78 @@ const Profile: React.FC = () => {
     };
 
     fetchProfileData();
-  }, []);
+    console.log("re-redner");
+  }, [avatarUrl]);
 
   async function handleEditProfile(event: React.FormEvent) {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
 
+    const firstName = firstNameRef.current?.value.trim();
+    const lastName = lastNameRef.current?.value.trim();
+    const email = emailRef.current?.value.trim();
+
+    if (firstName?.length! < 2) {
+      setFormData((prevValue) => {
+        return {
+          ...prevValue,
+          firstName: "Name must be 2 characters long.",
+        };
+      });
+      return;
+    } else {
+      setFormData((prevValue) => {
+        return {
+          ...prevValue,
+          firstName: "",
+        };
+      });
+    }
+
+    if (lastName?.length! < 2) {
+      setFormData((prevValue) => {
+        return {
+          ...prevValue,
+          lastName: "last name must be 2 characters long.",
+        };
+      });
+      return;
+    } else {
+      setFormData((prevValue) => {
+        return {
+          ...prevValue,
+          lastName: "",
+        };
+      });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email!)) {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        email: "Invalid email format",
+      }));
+      return;
+    }
+
     try {
-      const res = await axios.post("/api/users/edit-profile", data);
+      const res = await axios.post("/api/users/edit-profile", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     } catch (e: any) {
       console.log(e.message);
+    }
+  }
+
+  async function handleResetPassword(event: React.FormEvent) {
+    event.preventDefault(); 
+
+    try {
+      const res = await axios.post("/api/users/reset-password");
+    } catch (e: any) {
+      alert(e.message);
     }
   }
 
@@ -77,6 +167,30 @@ const Profile: React.FC = () => {
   function handleClickProfile() {
     inputFileRef.current?.click();
   }
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      setAvatar(selectedFile);
+
+      const formData = new FormData();
+      formData.append("avatar", selectedFile);
+      setAvatarLoading(true);
+
+      try {
+        if (selectedFile.type === "image/svg+xml") {
+          throw new Error("svg is not allowed");
+        }
+        const res = await axios.post("/api/users/profile-avatar", formData);
+        console.log(res.data.user.avatar);
+        setAvatarUrl(res.data.user.avatar);
+      } catch (e: any) {
+        alert(e.message);
+      } finally {
+        setAvatarLoading(false);
+      }
+    }
+  };
 
   return (
     <>
@@ -95,14 +209,39 @@ const Profile: React.FC = () => {
                 />
               ) : (
                 <>
-                  <input type="file" className="hidden" ref={inputFileRef} />
-                  <div
-                    onClick={handleClickProfile}
-                    className="flex items-center justify-center bg-pink-500 rounded-full h-36 w-36 text-2xl text-white font-montserrat hover:cursor-pointer"
-                  >
-                    {user?.firstName?.[0].toUpperCase()}
-                    {user?.lastName?.[0].toUpperCase()}
-                  </div>
+                  <input
+                    type="file"
+                    className="hidden"
+                    ref={inputFileRef}
+                    onChange={handleChange}
+                    accept=".jpg,.jpeg,.png,.svg,.gif,.webp"
+                  />
+
+                  {user?.avatar ? (
+                    <div
+                      onClick={handleClickProfile}
+                      className="flex items-center justify-center  rounded-full h-36 w-36 text-2xl text-white font-montserrat hover:cursor-pointer"
+                    >
+                      {avtarLoading ? (
+                        <Loader type="bars" color="pink" />
+                      ) : (
+                        <img
+                          key={user.avatar}
+                          src={user.avatar}
+                          alt="Profile avatar"
+                          className="rounded-full w-36 h-36 object-cover"
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      onClick={handleClickProfile}
+                      className="flex items-center justify-center bg-pink-500 rounded-full h-36 w-36 text-2xl text-white font-montserrat hover:cursor-pointer"
+                    >
+                      {user?.firstName?.[0].toUpperCase()}
+                      {user?.lastName?.[0].toUpperCase()}
+                    </div>
+                  )}
                 </>
               )}
               <div className="max-md:flex max-md:flex-col max-md:items-center md:ml-4 mt-3 md:mt-0">
@@ -141,7 +280,10 @@ const Profile: React.FC = () => {
               </h1>
             </div>
             <div className="flex max-md:flex-col p-2 items-centershadow-lg border rounded-md shadow-lg  dark:border-dark-500">
-              <form className="w-full flex flex-col">
+              <form
+                className="w-full flex flex-col"
+                onSubmit={handleResetPassword}
+              >
                 <div className="flex flex-col md:flex-row md:gap-4 w-full">
                   {loading ? (
                     <Skeleton height={40} width="100%" className="mt-3" />
@@ -149,9 +291,12 @@ const Profile: React.FC = () => {
                     <PasswordInput
                       label="Old Password"
                       name="oldPassword"
+                      ref={oldPasswordRef}
+                      error={formData.oldPassword}
                       placeholder="Enter Old Password"
                       autoComplete="off"
                       className="w-full mt-3 dark:text-dark-100"
+                      required
                       styles={{
                         input: {
                           backgroundColor: theme === "dark" ? "#2d2d2d" : "",
@@ -167,8 +312,11 @@ const Profile: React.FC = () => {
                     <PasswordInput
                       label="New Password"
                       name="newPassword"
+                      ref={newPasswordRef}
+                      error={formData.newPassword}
                       placeholder="Enter New Password"
                       autoComplete="off"
+                      required
                       styles={{
                         input: {
                           backgroundColor: theme === "dark" ? "#2d2d2d" : "",
@@ -185,8 +333,11 @@ const Profile: React.FC = () => {
                     <PasswordInput
                       label="Confirm Password"
                       name="confirmPassword"
+                      ref={confirmPasswordRef}
+                      error={formData.confirmPassword}
                       placeholder="Confirm New Password"
                       autoComplete="off"
+                      required
                       className="w-full mt-3 dark:text-dark-100"
                       styles={{
                         input: {
@@ -232,8 +383,11 @@ const Profile: React.FC = () => {
                     <TextInput
                       label="First Name"
                       name="firstName"
+                      ref={firstNameRef}
+                      error={formData.firstName}
                       placeholder="Enter"
                       autoComplete="off"
+                      required
                       value={userDetails.firstName}
                       onChange={(e) =>
                         setUserDetails({
@@ -257,8 +411,11 @@ const Profile: React.FC = () => {
                     <TextInput
                       label="Last Name"
                       name="lastName"
+                      ref={lastNameRef}
+                      error={formData.lastName}
                       placeholder="Enter"
                       autoComplete="off"
+                      required
                       value={userDetails.lastName}
                       onChange={(e) =>
                         setUserDetails({
@@ -277,13 +434,16 @@ const Profile: React.FC = () => {
                     />
                   )}
                   {loading ? (
-                    <Skeleton height={40} width="100%" className="mt-3" />
+                    <Skeleton height={40} width="100%" />
                   ) : (
                     <TextInput
                       label="Email"
                       name="email"
+                      ref={emailRef}
+                      error={formData.email}
                       placeholder="Enter"
                       autoComplete="off"
+                      required
                       value={userDetails.email}
                       onChange={(e) =>
                         setUserDetails({

@@ -18,8 +18,8 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    avatar:{
-        type:String
+    avatar: {
+        type: String
     },
     password: {
         type: String,
@@ -30,6 +30,13 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    bookedPost: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Post"
+        }
+
+    ]
 })
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

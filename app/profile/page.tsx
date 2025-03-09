@@ -10,6 +10,7 @@ import { Button, PasswordInput, TextInput, Skeleton } from "@mantine/core";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { Loader } from "@mantine/core";
+import { set } from "mongoose";
 
 interface User {
   firstName?: string;
@@ -49,6 +50,7 @@ const Profile: React.FC = () => {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { theme } = useTheme();
+  const isDarkTheme = theme === "dark";
   const [user, setUser] = useState<User | null>(null);
   const [userDetails, setUserDetails] = useState<{
     firstName: string;
@@ -146,12 +148,80 @@ const Profile: React.FC = () => {
   }
 
   async function handleResetPassword(event: React.FormEvent) {
-    event.preventDefault(); 
+    event.preventDefault();
+
+    const oldPassword = oldPasswordRef.current?.value.trim();
+    const newPassword = newPasswordRef.current?.value.trim();
+    const confirmPassword = confirmPasswordRef.current?.value.trim();
+
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!passwordRegex.test(oldPassword!)) {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        oldPassword:
+          "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character",
+      }));
+      return;
+    } else {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        oldPassword: "",
+      }));
+    }
+
+    if (!passwordRegex.test(newPassword!)) {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        newPassword:
+          "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character",
+      }));
+      return;
+    } else {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        newPassword: "",
+      }));
+    }
+
+    if (newPassword !== confirmPassword) {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        confirmPassword: "Passwords do not match",
+      }));
+      return;
+    } else {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        confirmPassword: "",
+      }));
+    }
+
+    if (newPassword !== confirmPassword) {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        confirmPassword: "Passwords do not match",
+      }));
+      return;
+    } else {
+      setFormData((prevErr) => ({
+        ...prevErr,
+        confirmPassword: "",
+      }));
+    }
 
     try {
-      const res = await axios.post("/api/users/reset-password");
+      const formData = new FormData(event.target as HTMLFormElement);
+      const data = Object.fromEntries(formData.entries());
+
+      const res = await axios.post("/api/users/reset-password", data);
     } catch (e: any) {
       alert(e.message);
+    } finally {
+      oldPasswordRef.current!.value = "";
+      newPasswordRef.current!.value = "";
+      confirmPasswordRef.current!.value = "";
     }
   }
 
@@ -201,12 +271,7 @@ const Profile: React.FC = () => {
           <div className="flex max-md:justify-center w-full md:mt-10  ">
             <div className="flex max-md:flex-col items-center">
               {loading ? (
-                <Skeleton
-                  height={144}
-                  width={144}
-                  circle
-                  classNames={{ root: "dark:bg-dark-500" }}
-                />
+                <Skeleton height={144} width={144} circle />
               ) : (
                 <>
                   <input
@@ -307,7 +372,12 @@ const Profile: React.FC = () => {
                     />
                   )}
                   {loading ? (
-                    <Skeleton height={40} width="100%" className="mt-3" />
+                    <Skeleton
+                      height={40}
+                      width="100%"
+                      className="mt-3"
+                      classNames={{ root: "dark:bg-dark-500" }}
+                    />
                   ) : (
                     <PasswordInput
                       label="New Password"
@@ -357,6 +427,7 @@ const Profile: React.FC = () => {
                     <Button
                       className="text-white px-4 py-2 rounded"
                       color="pink"
+                      type="submit"
                     >
                       Change Password
                     </Button>

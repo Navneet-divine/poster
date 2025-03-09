@@ -8,7 +8,7 @@ connectDB();
 
 export async function POST(req: NextRequest, { params }: { params: { postId: string } }) {
     try {
-        const { postId } = await params; // Await params to access postId
+        const { postId } = params;
         const token = req.cookies.get("token")?.value;
 
         if (!token) {
@@ -32,19 +32,24 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
             return NextResponse.json({ error: "Post not found" }, { status: 404 });
         }
 
-        // Ensure that bookedPost and bookedBy arrays are initialized
-        if (!user.bookedPost) user.bookedPost = [];
-        if (!post.bookedBy) post.bookedBy = [];
 
-        // Add the post to the user's bookedPost array and vice versa
-        user.bookedPost.push(postId);
-        post.bookedBy.push(userId);
+        const isAlreadyBooked = user.bookedPost.includes(postId);
+        if (isAlreadyBooked) {
 
-        // Save both the user and the post
+            user.bookedPost = user.bookedPost.filter((id: string) => id.toString() !== postId);
+            post.bookedBy = post.bookedBy.filter((id: string) => id.toString() !== userId);
+            post.isBooked = false
+        } else {
+
+            user.bookedPost.push(postId);
+            post.bookedBy.push(userId);
+            post.isBooked = true
+        }
+
         await user.save();
         await post.save();
 
-        return NextResponse.json({ msg: "Booked successfully" }, { status: 200 });
+        return NextResponse.json({ msg: isAlreadyBooked ? "Booking removed" : "Booked successfully" }, { status: 200 });
     } catch (e: any) {
         console.error(e); // Log the error for debugging
         return NextResponse.json({ error: e.message }, { status: 500 });

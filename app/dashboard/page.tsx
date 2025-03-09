@@ -24,6 +24,7 @@ interface Post {
   isBooked: boolean;
   createdAt: string;
   likedBy: string[];
+  bookedBy: string[];
   author: {
     firstName: string;
     lastName: string;
@@ -66,7 +67,7 @@ export default function Dashboard() {
   }, []);
 
   async function handleToggleLike(postId: string) {
-    if (!currentUserId) return; // Ensure currentUserId is not null
+    if (!currentUserId) return;
 
     const postIndex = posts.findIndex((post) => post._id === postId);
     if (postIndex === -1) return;
@@ -77,32 +78,60 @@ export default function Dashboard() {
     const newIsLiked = !post.likedBy.includes(currentUserId);
     const newLikesCount = newIsLiked ? post.likes + 1 : post.likes - 1;
 
-    // Optimistically update the UI
     updatedPosts[postIndex] = {
       ...post,
       likes: newLikesCount,
       likedBy: newIsLiked
-        ? [...post.likedBy, currentUserId] // Add user to likedBy array
-        : post.likedBy.filter((id: any) => id.toString() !== currentUserId), // Remove user from likedBy array
+        ? [...post.likedBy, currentUserId]
+        : post.likedBy.filter((id: any) => id.toString() !== currentUserId),
     };
 
-    setPosts(updatedPosts); // Update the UI immediately
+    setPosts(updatedPosts);
 
     try {
       await axios.post(`/api/posts/toggle-like/${postId}`);
     } catch (e: any) {
       alert(e.message);
-      // Revert changes if the API request fails
+
       updatedPosts[postIndex] = post;
       setPosts(updatedPosts);
     }
   }
 
   async function handleBookMark(postId: string) {
+    if (!currentUserId) return;
+
+    const postIndex = posts.findIndex((post) => post._id === postId);
+    if (postIndex === -1) return;
+
+    const updatedPosts = [...posts];
+    const post = updatedPosts[postIndex];
+
+    const newIsBooked = !post.bookedBy.includes(currentUserId);
+
+    // Optimistically update the UI
+    updatedPosts[postIndex] = {
+      ...post,
+      isBooked: newIsBooked,
+      bookedBy: newIsBooked
+        ? [...post.bookedBy, currentUserId]
+        : post.bookedBy.filter((id: any) => id.toString() !== currentUserId),
+    };
+
+    setPosts(updatedPosts);
+
     try {
-      const res = await axios.post(`/api/posts/book-mark/${postId}`);
+      await axios.post(`/api/posts/book-mark/${postId}`);
     } catch (e: any) {
       alert(e.message);
+
+      // Revert changes if the API request fails
+      updatedPosts[postIndex] = {
+        ...post,
+        isBooked: !newIsBooked,
+        bookedBy: post.bookedBy,
+      };
+      setPosts(updatedPosts);
     }
   }
 
@@ -120,7 +149,6 @@ export default function Dashboard() {
           </div>
 
           {loading ? (
-            // Skeleton Loader Design (Matches Post Layout)
             <div className="flex flex-col items-center w-full md:w-[30rem] lg:w-[45rem]">
               {[...Array(3)].map((_, index) => (
                 <div
@@ -158,9 +186,8 @@ export default function Dashboard() {
                 className="border border-dark-50 rounded-3xl mt-5 sm:mt-8 mb-7 p-5 w-full md:w-[30rem] lg:w-[45rem] lg:h-[45rem] dark:border-dark-400 dark:border-dark-500"
               >
                 <div className="flex flex-col">
-                  {/* Post Header (Profile & Name) */}
                   <div className="flex items-center gap-3">
-                    <div className="h-14 w-14 rounded-full bg-pink-500 flex items-center justify-center overflow-hidden">
+                    <div className="h-14 w-16 md:w-[60px] rounded-full bg-pink-500 flex items-center justify-center overflow-hidden">
                       <h1 className="font-inter text-white text-xl">
                         {post.author.firstName
                           ? post.author.firstName[0].toUpperCase()
@@ -170,7 +197,6 @@ export default function Dashboard() {
                           : "?"}
                       </h1>
                     </div>
-
                     <div className="flex items-center w-full">
                       <div className="w-full">
                         <h1 className="font-bold dark:text-white">
@@ -183,14 +209,13 @@ export default function Dashboard() {
                           - {post.location}
                         </p>
                       </div>
-                      <Link href={`post-detail/${post._id}`}>
+                      <Link href={`/post-detail/${post._id}`}>
                         <MdEditSquare className="text-xl text-dark-400 dark:text-white" />
                       </Link>
                     </div>
                   </div>
 
-                  {/* Post Image */}
-                  <Link href={`post-detail/${post._id}`}>
+                  <Link href={`/post-detail/${post._id}`}>
                     <div className="mt-5 h-[20rem] lg:h-[30rem] rounded-3xl cursor-pointer">
                       <img
                         src={post.image}
@@ -200,14 +225,12 @@ export default function Dashboard() {
                     </div>
                   </Link>
 
-                  {/* Post Caption */}
                   <div className="mt-5">
                     <p className="font-inter font-semibold text-sm dark:text-white">
                       {post.caption}
                     </p>
                   </div>
 
-                  {/* Like, Comment & Save */}
                   <div className="flex justify-between mt-10">
                     <div className="flex items-center">
                       <button onClick={() => handleToggleLike(post._id)}>
@@ -220,12 +243,12 @@ export default function Dashboard() {
                       <p className="text-lg font-inter dark:text-dark-200 ml-1">
                         {post.likes}
                       </p>
-                      <Link href={`post-detail/${post._id}`} className="ml-5">
+                      <Link href={`/post-detail/${post._id}`} className="ml-5">
                         <FaRegComment className="text-xl dark:text-dark-200" />
                       </Link>
                     </div>
                     <button onClick={() => handleBookMark(post._id)}>
-                      {post.isBooked ? (
+                      {post.bookedBy.includes(currentUserId!) ? (
                         <PiBookmarkSimpleFill className="text-2xl dark:text-dark-200" />
                       ) : (
                         <PiBookmarkSimpleLight className="text-2xl dark:text-dark-200" />

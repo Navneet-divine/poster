@@ -125,7 +125,6 @@ export default function Dashboard() {
     } catch (e: any) {
       alert(e.message);
 
-      // Revert changes if the API request fails
       updatedPosts[postIndex] = {
         ...post,
         isBooked: !newIsBooked,
@@ -210,7 +209,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                       <Link href={`/post-detail/${post._id}`}>
-                        <MdEditSquare className="text-xl text-dark-400 dark:text-white" />
+                        <MdEditSquare className="text-xl text-dark-400 dark:text-dark-100" />
                       </Link>
                     </div>
                   </div>

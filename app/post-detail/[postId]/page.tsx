@@ -13,6 +13,7 @@ import { PiBookmarkSimpleLight, PiBookmarkSimpleFill } from "react-icons/pi";
 import axios from "axios";
 import Footer from "@/components/UI/Footer";
 import Link from "next/link";
+import { Skeleton } from "@mantine/core";
 
 interface Post {
   image: string;
@@ -114,7 +115,7 @@ export default function PostDetail() {
   async function handleDeletePost(postId: string) {
     try {
       await axios.post(`/api/posts/delete-post/${postId}`);
-      router.push("/dashboard"); // Redirect to dashboard after deletion
+      router.push("/dashboard");
     } catch (e: any) {
       alert(e.message);
     }
@@ -127,96 +128,118 @@ export default function PostDetail() {
       <MainContent>
         <div className="p-5">
           <div className="border w-full h-full rounded-3xl p-4 dark:border-dark-500">
-            <div className=" h-[20rem] rounded-3xl">
-              {post && (
-                <img
-                  src={post.image}
-                  alt="postImg"
-                  className=" rounded-3xl object-cover h-[20rem] w-full"
-                />
-              )}
-            </div>
-
-            <div className="flex justify-between items-center mt-5 border border-t-0 border-l-0 border-r-0 pb-5 dark:border-dark-500">
-              <div className="flex items-center">
-                {post?.author.avatar ? (
-                  <div className="rounded-full h-12 w-12 bg-pink">
-                    <img
-                      src={post.author.avatar}
-                      alt="authorAvatar"
-                      className=" rounded-3xl object-cover h-12 w-12"
-                    />
-                  </div>
+            <div className="flex flex-col lg:flex-row">
+              <div className="lg:w-1/2">
+                {post ? (
+                  <img
+                    src={post.image}
+                    alt="postImg"
+                    className="rounded-3xl object-cover h-[20rem] w-full"
+                  />
                 ) : (
-                  <div className="flex justify-center items-center rounded-full h-12 w-12 bg-pink-500 text-white font-inter">
-                    {post?.author.firstName[0]}
-                    {post?.author.lastName[0]}
-                  </div>
+                  <Skeleton height={300} radius="xl" />
                 )}
-                <div className="ml-2">
-                  <div>
-                    <h1 className="dark:text-white">
-                      {post?.author.firstName}
-                    </h1>
+              </div>
+
+              <div className="lg:ml-5 flex-none lg:w-1/2">
+                <div className="flex justify-between items-center mt-5 border border-t-0 border-l-0 border-r-0 pb-5 dark:border-dark-500">
+                  {/* Author Profile */}
+                  <div className="flex items-center">
+                    {post ? (
+                      post.author.avatar ? (
+                        <div className="rounded-full h-12 w-12 bg-pink">
+                          <img
+                            src={post.author.avatar}
+                            alt="authorAvatar"
+                            className="rounded-3xl object-cover h-12 w-12"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex justify-center items-center rounded-full h-12 w-12 bg-pink-500 text-white font-inter">
+                          {post.author.firstName[0]}
+                          {post.author.lastName[0]}
+                        </div>
+                      )
+                    ) : (
+                      <Skeleton circle height={48} width={48} />
+                    )}
+
+                    <div className="ml-2">
+                      <div>
+                        <h1 className="dark:text-white">
+                          {post ? (
+                            post.author.firstName
+                          ) : (
+                            <Skeleton width={80} />
+                          )}
+                        </h1>
+                      </div>
+                      <div>
+                        <p className="font-inter text-xs text-gray-500">
+                          {post ? (
+                            formatDistanceToNow(new Date(post.createdAt), {
+                              addSuffix: true,
+                            })
+                          ) : (
+                            <Skeleton width={120} />
+                          )}
+                          - {post?.location}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-inter text-xs text-gray-500">
-                      {post &&
-                        formatDistanceToNow(new Date(post.createdAt), {
-                          addSuffix: true,
-                        })}
-                      - {post?.location}
-                    </p>
+
+                  {/* Edit and Delete Icons */}
+                  <div className="flex">
+                    {post?.author._id === currentUserId && (
+                      <Link href={`/edit-post/${postId}`}>
+                        <div className="cursor-pointer">
+                          <MdEditSquare className="text-xl dark:text-dark-100" />
+                        </div>
+                      </Link>
+                    )}
+
+                    {post?.author._id === currentUserId && (
+                      <div
+                        onClick={() => handleDeletePost(postId as string)}
+                        className="cursor-pointer"
+                      >
+                        <MdDelete className="text-xl ml-2 dark:text-dark-100" />
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
-              <div className="flex ">
-                {post?.author._id === currentUserId && (
-                  <Link href={`/edit-post/${postId}`}>
-                    <div className="cursor-pointer">
-                      <MdEditSquare className="text-xl dark:text-dark-100" />
-                    </div>
-                  </Link>
-                )}
 
-                {post?.author._id === currentUserId && (
-                  <div
-                    onClick={() => handleDeletePost(postId as string)}
-                    className="cursor-pointer"
-                  >
-                    <MdDelete className="text-xl ml-2 dark:text-dark-100" />
+                <div className="mt-5">
+                  <p className="font-inter text-sm dark:text-white">
+                    {post ? post.caption : <Skeleton height={40} />}
+                  </p>
+                </div>
+
+                <div className="flex justify-between mt-5 lg:mt-32">
+                  <div className="flex items-center">
+                    <button onClick={() => handleToggleLike(postId as string)}>
+                      {post?.likedBy.includes(currentUserId!) ? (
+                        <FaHeart className="text-2xl text-red-500" />
+                      ) : (
+                        <FaRegHeart className="text-2xl text-dark-200" />
+                      )}
+                    </button>
+                    <p className="text-lg font-inter dark:text-dark-200 ml-1">
+                      {post ? post.likes : <Skeleton width={40} />}
+                    </p>
+                    <FaRegComment className="text-xl dark:text-dark-200 ml-5" />
                   </div>
-                )}
+                  <button onClick={() => handleBookMark(postId as string)}>
+                    {post?.bookedBy.includes(currentUserId!) ? (
+                      <PiBookmarkSimpleFill className="text-2xl dark:text-dark-200" />
+                    ) : (
+                      <PiBookmarkSimpleLight className="text-2xl dark:text-dark-200" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="mt-5">
-              <p className="font-inter text-sm dark:text-white">
-                {post?.caption}
-              </p>
-            </div>
-            <div className="flex justify-between  mt-5">
-              <div className="flex items-center">
-                <button onClick={() => handleToggleLike(postId as string)}>
-                  {post?.likedBy.includes(currentUserId!) ? (
-                    <FaHeart className="text-2xl text-red-500" />
-                  ) : (
-                    <FaRegHeart className="text-2xl text-dark-200" />
-                  )}
-                </button>
-                <p className="text-lg font-inter dark:text-dark-200 ml-1">
-                  {post?.likes}
-                </p>
-                <FaRegComment className="text-xl dark:text-dark-200 ml-5" />
-              </div>
-              <button onClick={() => handleBookMark(postId as string)}>
-                {post?.bookedBy.includes(currentUserId!) ? (
-                  <PiBookmarkSimpleFill className="text-2xl dark:text-dark-200" />
-                ) : (
-                  <PiBookmarkSimpleLight className="text-2xl dark:text-dark-200" />
-                )}
-              </button>
-            </div>
-            {/* dfd */}
           </div>
         </div>
       </MainContent>

@@ -105,7 +105,6 @@ export default function PostDetail() {
 
     try {
       await axios.post(`/api/posts/book-mark/${postId}`);
-      router.push("/dashboard");
     } catch (e: any) {
       alert(e.message);
       setPost(post);
@@ -137,13 +136,14 @@ export default function PostDetail() {
                     className="rounded-3xl object-cover h-[20rem] w-full"
                   />
                 ) : (
-                  <Skeleton height={300} radius="xl" />
+                  <>
+                    <Skeleton height={300} radius="xl" />
+                  </>
                 )}
               </div>
 
               <div className="lg:ml-5 flex-none lg:w-1/2">
                 <div className="flex justify-between items-center mt-5 border border-t-0 border-l-0 border-r-0 pb-5 dark:border-dark-500">
-                  {/* Author Profile */}
                   <div className="flex items-center">
                     {post ? (
                       post.author.avatar ? (

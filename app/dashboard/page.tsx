@@ -142,7 +142,7 @@ export default function Dashboard() {
         <div className="flex flex-col items-center p-3 pb-14">
           <div className="flex items-center w-full md:w-[30rem] lg:w-[45rem] mt-3">
             <FaHome className="text-4xl dark:text-white" />
-            <h1 className="text-3xl font-bold font-inter ml-2 dark:text-white">
+            <h1 className="text-3xl font-bold font-inter ml-2 dark:text-white ">
               Home Feed
             </h1>
           </div>

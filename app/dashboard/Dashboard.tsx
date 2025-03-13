@@ -48,8 +48,12 @@ export default function Dashboard() {
           setPosts(res.data.posts);
           setLoading(false);
         }, 1000);
-      } catch (error: any) {
-        console.log(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        } else {
+          console.log("An unknown error occurred");
+        }
         setLoading(false);
       }
     }
@@ -61,8 +65,12 @@ export default function Dashboard() {
       try {
         const res = await axios.get("/api/users/current-user");
         setCurrentUserId(res.data.user._id);
-      } catch (error: any) {
-        console.log(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        } else {
+          console.log("An unknown error occurred");
+        }
       }
     }
     fetchUser();
@@ -85,15 +93,19 @@ export default function Dashboard() {
       likes: newLikesCount,
       likedBy: newIsLiked
         ? [...post.likedBy, currentUserId]
-        : post.likedBy.filter((id) => id !== currentUserId),
+        : post.likedBy.filter((id: string) => id !== currentUserId),
     };
 
     setPosts(updatedPosts);
 
     try {
       await axios.post(`/api/posts/toggle-like/${postId}`);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("An unknown error occurred");
+      }
 
       updatedPosts[postIndex] = post;
       setPosts(updatedPosts);
@@ -123,8 +135,12 @@ export default function Dashboard() {
 
     try {
       await axios.post(`/api/posts/book-mark/${postId}`);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("An unknown error occurred");
+      }
 
       updatedPosts[postIndex] = {
         ...post,

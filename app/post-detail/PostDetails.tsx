@@ -38,32 +38,40 @@ export default function PostDetail() {
   const [post, setPost] = useState<Post | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || ""; // Dynamically set API URL
+
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await axios.get("/api/users/current-user");
+        const res = await axios.get(`${apiUrl}/api/users/current-user`);
         setCurrentUserId(res.data.user._id);
-      } catch (e: any) {
-        console.log(e.message);
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          console.error(e.message);
+        } else {
+          console.error("An unknown error occurred.");
+        }
       }
     }
     fetchUser();
-  }, []);
+  }, [apiUrl]);
 
   useEffect(() => {
     if (!postId || Array.isArray(postId)) return;
 
     async function fetchPostDetails() {
       try {
-        const res = await axios.get(`/api/posts/post-details/${postId}`);
+        const res = await axios.get(
+          `${apiUrl}/api/posts/post-details/${postId}`
+        );
         setPost(res.data.post);
-      } catch (e: any) {
-        alert(e.message);
+      } catch (e: unknown) {
+        alert(e instanceof Error ? e.message : "An unknown error occurred.");
       }
     }
 
     fetchPostDetails();
-  }, [postId]);
+  }, [postId, apiUrl]);
 
   async function handleToggleLike(postId: string) {
     if (!currentUserId || !post) return;
@@ -76,16 +84,16 @@ export default function PostDetail() {
       likes: newLikesCount,
       likedBy: newIsLiked
         ? [...post.likedBy, currentUserId]
-        : post.likedBy.filter((id: any) => id.toString() !== currentUserId),
+        : post.likedBy.filter((id: string) => id.toString() !== currentUserId),
     };
 
     setPost(updatedPost);
 
     try {
-      await axios.post(`/api/posts/toggle-like/${postId}`);
-    } catch (e: any) {
-      alert(e.message);
-      setPost(post);
+      await axios.post(`${apiUrl}/api/posts/toggle-like/${postId}`);
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "An unknown error occurred.");
+      setPost(post); // Revert to previous state on error
     }
   }
 
@@ -98,25 +106,29 @@ export default function PostDetail() {
       ...post,
       bookedBy: newIsBooked
         ? [...post.bookedBy, currentUserId]
-        : post.bookedBy.filter((id: any) => id.toString() !== currentUserId),
+        : post.bookedBy.filter((id: string) => id.toString() !== currentUserId),
     };
 
     setPost(updatedPost);
 
     try {
-      await axios.post(`/api/posts/book-mark/${postId}`);
-    } catch (e: any) {
-      alert(e.message);
-      setPost(post);
+      await axios.post(`${apiUrl}/api/posts/book-mark/${postId}`);
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "An unknown error occurred.");
+      setPost(post); // Revert to previous state on error
     }
   }
 
   async function handleDeletePost(postId: string) {
     try {
-      await axios.post(`/api/posts/delete-post/${postId}`);
+      await axios.post(`${apiUrl}/api/posts/delete-post/${postId}`);
       router.push("/dashboard");
-    } catch (e: any) {
-      alert(e.message);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        alert(e.message);
+      } else {
+        alert("An unknown error occurred.");
+      }
     }
   }
 

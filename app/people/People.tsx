@@ -51,8 +51,12 @@ const People: React.FC = () => {
         setHasMore(false);
       }
       setLoading(false);
-    } catch (e: any) {
-      console.error("Error fetching users:", e.message);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error("Error fetching users:", e.message);
+      } else {
+        console.error("An unknown error occurred while fetching users.");
+      }
       alert("An error occurred while fetching users.");
       setLoading(false);
     }

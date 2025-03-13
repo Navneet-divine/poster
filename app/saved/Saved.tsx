@@ -41,8 +41,12 @@ const Saved: React.FC = () => {
           setBookedPosts(res.data.posts);
           setLoading(false);
         }, 1000);
-      } catch (e: any) {
-        alert(e.message);
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          alert(e.message);
+        } else {
+          alert("An unknown error occurred.");
+        }
         setLoading(false);
       }
     }

@@ -8,6 +8,7 @@ import { Notification } from "@mantine/core";
 import { Button, TextInput, PasswordInput } from "@mantine/core";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function AppHeroContent() {
   const [error, setError] = useState<{
@@ -177,12 +178,21 @@ export default function AppHeroContent() {
 
       closeRegister();
       router.push("/dashboard");
-    } catch (error: any) {
-      setNotification({
-        title: "Error",
-        message: error.response?.data?.message || "Registration failed",
-        color: "red",
-      });
+    } catch (error: unknown) {
+      if (error instanceof Error && "response" in error) {
+        setNotification({
+          title: "Error",
+          message:
+            (error as any).response?.data?.message || "Registration failed",
+          color: "red",
+        });
+      } else {
+        setNotification({
+          title: "Error",
+          message: "Registration failed",
+          color: "red",
+        });
+      }
 
       setTimeout(() => {
         setNotification(null);
@@ -235,12 +245,22 @@ export default function AppHeroContent() {
 
       closeLogin();
       router.push("/dashboard");
-    } catch (error: any) {
-      setNotification({
-        title: "Login Failed",
-        message: error.response?.data?.message || "Invalid credentials",
-        color: "red",
-      });
+    } catch (error: unknown) {
+      if (error instanceof Error && "response" in error) {
+        setNotification({
+          title: "Login Failed",
+          message:
+            (error as any).response?.data?.message || "Invalid credentials",
+          color: "red",
+        });
+      } else {
+        setNotification({
+          title: "Login Failed",
+          message: "Invalid credentials",
+          color: "red",
+        });
+      }
+
       closeLogin();
 
       setTimeout(() => {
@@ -438,7 +458,6 @@ export default function AppHeroContent() {
             </LoginModal>
           </div>
 
-          {/* Buttons directly below the paragraph */}
           <div className="mt-6 flex gap-4 justify-start">
             <Button
               onClick={openRegister}
@@ -461,10 +480,12 @@ export default function AppHeroContent() {
         </div>
 
         <div className="ml-auto max-xl:hidden w-[40%]">
-          <img
+          <Image
             className="mt-8"
             src="/imgs/posterImg.svg"
             alt="Poster Illustration"
+            width={500}
+            height={500}
           />
         </div>
       </div>

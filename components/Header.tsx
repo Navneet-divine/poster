@@ -5,6 +5,7 @@ import { IoSunnyOutline } from "react-icons/io5";
 import { FaGithub } from "react-icons/fa";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import Image from "next/image"; // Import next/image
 
 export default function Header() {
   const [mounted, setMounted] = useState(false);
@@ -21,7 +22,12 @@ export default function Header() {
   return (
     <div className="flex top-0 z-50 fixed w-full bg-white dark:bg-dark-700 justify-between items-center border border-t-0 border-l-0 border-r-0 border-b-2 p-3 dark:border-dark-500">
       <div>
-        <img src="/imgs/favicon.ico" alt="Logo" />
+        <Image
+          src="/imgs/favicon.ico"
+          alt="Logo"
+          width={32} // Specify the width
+          height={32} // Specify the height
+        />
       </div>
       <div className="font-dancingScript text-4xl dark:text-dark-50">
         Poster

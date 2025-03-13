@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, FormEvent } from "react";
+import { useState, useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/UI/Footer";
 import MainContent from "@/components/UI/MainContent";
@@ -105,18 +105,15 @@ const EditPost: React.FC = () => {
 
       console.log("Response:", res.data);
       router.push("/dashboard");
-    } catch (e: any) {
-      alert(e.message);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        alert(e.message);
+      } else {
+        alert("An unknown error occurred");
+      }
     } finally {
       setLoader(false);
     }
-
-    // Log formData state
-    console.log("Form Data:", {
-      caption: formData.caption,
-      location: formData.location,
-      image: formData.image?.name || null,
-    });
   }
 
   return (

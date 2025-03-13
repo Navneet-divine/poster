@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, ChangeEvent, FormEvent } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/UI/Footer";
 import MainContent from "@/components/UI/MainContent";
@@ -11,6 +11,7 @@ import fileUploadImg from "@/public/icons/file-upload.svg";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Create: React.FC = () => {
   const [errors, setErrors] = useState({
@@ -35,13 +36,13 @@ const Create: React.FC = () => {
   }
 
   function handleChange(
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] || null;
     if (file) {
       const previewUrl = URL.createObjectURL(file);
@@ -53,7 +54,7 @@ const Create: React.FC = () => {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     try {
@@ -98,14 +99,22 @@ const Create: React.FC = () => {
         setErrors((prev) => ({ ...prev, location: "" }));
       }
 
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/create-post`, fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/create-post`,
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       console.log("Response:", res.data);
       router.push("/dashboard");
-    } catch (e: any) {
-      alert(e.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("An unexpected error occurred");
+      }
     } finally {
       setLoader(false);
     }
@@ -166,14 +175,21 @@ const Create: React.FC = () => {
                 />
                 <div className="flex flex-col justify-center items-center h-full">
                   {formData.preview ? (
-                    <img
+                    <Image
                       src={formData.preview}
                       alt="Preview"
                       className="max-w-full rounded-md w-full h-full object-cover"
+                      width={500}
+                      height={500}
                     />
                   ) : (
                     <>
-                      <img src={fileUploadImg.src} alt="file-upload" />
+                      <Image
+                        src={fileUploadImg.src}
+                        alt="file-upload"
+                        width={100}
+                        height={100}
+                      />
                       <button
                         type="button"
                         className="bg-pink-500 mt-3 h-10 rounded-md px-5 py-3 flex items-center text-white font-inter dark:bg-dark-500"

@@ -14,6 +14,7 @@ import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa";
 import { PiBookmarkSimpleLight, PiBookmarkSimpleFill } from "react-icons/pi";
 import { Skeleton } from "@mantine/core";
 import Head from "next/head";
+import Image from "next/image";
 
 interface Post {
   caption: string;
@@ -47,8 +48,8 @@ export default function Dashboard() {
           setPosts(res.data.posts);
           setLoading(false);
         }, 1000);
-      } catch (e: any) {
-        console.log(e.message);
+      } catch (error: any) {
+        console.log(error.message);
         setLoading(false);
       }
     }
@@ -60,8 +61,8 @@ export default function Dashboard() {
       try {
         const res = await axios.get("/api/users/current-user");
         setCurrentUserId(res.data.user._id);
-      } catch (e: any) {
-        console.log(e.message);
+      } catch (error: any) {
+        console.log(error.message);
       }
     }
     fetchUser();
@@ -84,15 +85,15 @@ export default function Dashboard() {
       likes: newLikesCount,
       likedBy: newIsLiked
         ? [...post.likedBy, currentUserId]
-        : post.likedBy.filter((id: any) => id.toString() !== currentUserId),
+        : post.likedBy.filter((id) => id !== currentUserId),
     };
 
     setPosts(updatedPosts);
 
     try {
       await axios.post(`/api/posts/toggle-like/${postId}`);
-    } catch (e: any) {
-      alert(e.message);
+    } catch (error: any) {
+      alert(error.message);
 
       updatedPosts[postIndex] = post;
       setPosts(updatedPosts);
@@ -115,15 +116,15 @@ export default function Dashboard() {
       isBooked: newIsBooked,
       bookedBy: newIsBooked
         ? [...post.bookedBy, currentUserId]
-        : post.bookedBy.filter((id: any) => id.toString() !== currentUserId),
+        : post.bookedBy.filter((id) => id !== currentUserId),
     };
 
     setPosts(updatedPosts);
 
     try {
       await axios.post(`/api/posts/book-mark/${postId}`);
-    } catch (e: any) {
-      alert(e.message);
+    } catch (error: any) {
+      alert(error.message);
 
       updatedPosts[postIndex] = {
         ...post,
@@ -223,10 +224,12 @@ export default function Dashboard() {
 
                   <Link href={`/post-detail/${post._id}`}>
                     <div className="mt-5 h-[20rem] lg:h-[30rem] rounded-3xl cursor-pointer">
-                      <img
+                      <Image
                         src={post.image}
                         alt="post img"
                         className="object-cover h-full w-full rounded-3xl lg:w-full"
+                        width={500}
+                        height={500}
                       />
                     </div>
                   </Link>

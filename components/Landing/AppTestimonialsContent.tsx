@@ -32,7 +32,7 @@ export default function AppTestimonialsContent() {
           </div>
           <div className="mt-3">
             <p className="font-raleway text-[14px] dark:text-dark-100">
-              "Big shoutout to
+              &#34;Big shoutout to
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 @poster
               </span>
@@ -42,9 +42,9 @@ export default function AppTestimonialsContent() {
                 @poster
               </span>
               made all the difference. Their approach to teaching was practical,
-              empowering, and always tailored to my needs. I’m forever grateful
-              for the confidence they instilled in me. If you're looking to
-              level up your career, this is the place to be!"
+              empowering, and always tailored to my needs. I&#39;m forever
+              grateful for the confidence they instilled in me. If you&#39;re
+              looking to level up your career&#44; this is the place to be!"
             </p>
           </div>
 
@@ -77,7 +77,7 @@ export default function AppTestimonialsContent() {
           </div>
           <div className="mt-3">
             <p className="font-raleway text-[14px] dark:text-dark-100">
-              "I’ve had an amazing experience with the tutors at{" "}
+              &#34;I&#39;ve had an amazing experience with the tutors at
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 @poster
               </span>
@@ -88,7 +88,8 @@ export default function AppTestimonialsContent() {
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 @poster
               </span>
-              truly invests in your success, and I couldn’t be more thankful!"
+              truly invests in your success&#44; and I couldn&#39;t be more
+              thankful!
             </p>
           </div>
           <div className="mt-3">
@@ -120,7 +121,7 @@ export default function AppTestimonialsContent() {
           </div>
           <div className="mt-3">
             <p className="font-raleway text-[14px] dark:text-dark-100">
-              "I can’t recommend{" "}
+              &#34;I can&#39;t recommend
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 @poster
               </span>
@@ -130,8 +131,9 @@ export default function AppTestimonialsContent() {
                 @poster
               </span>
               made the process so much easier. Their 1-on-1 mentoring sessions
-              have been a game-changer, and my son is now excelling in his
-              studies. Thank you for being there when we needed you the most!"
+              have been a game-changer&#44; and my son is now excelling in his
+              studies. Thank you for being there when we needed you the
+              most!&#34;
             </p>
           </div>
           <div className="mt-3">
@@ -165,10 +167,10 @@ export default function AppTestimonialsContent() {
           </div>
           <div className="mt-3">
             <p className="font-raleway text-[14px] dark:text-dark-100">
-              "Just wanted to thank{" "}
+              &#34;Just wanted to thank
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 @poster
-              </span>{" "}
+              </span>
               for the incredible learning experience. I’ve always struggled with
               certain subjects, but the tutors at{" "}
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
@@ -180,8 +182,8 @@ export default function AppTestimonialsContent() {
               chose{" "}
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 @poster
-              </span>{" "}
-              for my education!"
+              </span>
+              for my education!&#34;
             </p>
           </div>
           <div className="mt-3">
@@ -212,16 +214,16 @@ export default function AppTestimonialsContent() {
           </div>
           <div className="mt-3">
             <p className="font-raleway text-[14px] dark:text-dark-100">
-              "I can’t thank{" "}
+              &#34:I can&#39;t thank
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 @poster
               </span>
               enough for the amazing guidance I received throughout my learning
-              journey. The tutors are patient, understanding, and truly
+              journey. The tutors are patient&#44; understanding&#44; and truly
               dedicated to helping their students succeed. They break down
-              complex topics in an easy-to-understand way, and I never felt
-              overwhelmed. If you're serious about improving, this is the place
-              to be!"
+              complex topics in an easy-to-understand way&#44; and I never felt
+              overwhelmed. If you&#39;re serious about improving&#44; this is
+              the place to be!&#39;
             </p>
           </div>
           <div className="mt-3">

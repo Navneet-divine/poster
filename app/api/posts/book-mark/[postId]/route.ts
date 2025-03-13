@@ -6,9 +6,9 @@ import { verifyJWT } from "@/utils/tokenUtils";
 
 connectDB();
 
-export async function POST(req: NextRequest, context: { params: { postId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: { postId: string } }) {
     try {
-        const { postId } = context.params;
+        const { postId } = params;
         const token = req.cookies.get("token")?.value;
 
         if (!token) {

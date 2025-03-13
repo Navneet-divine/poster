@@ -49,13 +49,12 @@ const Profile: React.FC = () => {
     newPassword: "",
     confirmPassword: "",
   });
-  const [avatar, setAvatar] = useState<File | null>(null);
+
   const [avatarUrl, setAvatarUrl] = useState("");
   const [avatarLoading, setAvatarLoading] = useState(false);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { theme } = useTheme();
-  const isDarkTheme = theme === "dark";
   const [user, setUser] = useState<User | null>(null);
   const [userDetails, setUserDetails] = useState<{
     firstName: string;
@@ -225,7 +224,6 @@ const Profile: React.FC = () => {
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
-      setAvatar(selectedFile);
 
       const formData = new FormData();
       formData.append("avatar", selectedFile);

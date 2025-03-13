@@ -110,7 +110,6 @@ export default function Dashboard() {
 
     const newIsBooked = !post.bookedBy.includes(currentUserId);
 
-    // Optimistically update the UI
     updatedPosts[postIndex] = {
       ...post,
       isBooked: newIsBooked,

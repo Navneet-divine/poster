@@ -51,15 +51,13 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
             const buffer = Buffer.from(arrayBuffer);
             const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-            try {
-                const result = await cloudinary.v2.uploader.upload(base64String, {
-                    folder: "poster",
-                    resource_type: "auto",
-                });
-                imageUrl = result.secure_url;
-            } catch (cloudinaryError) {
-                return NextResponse.json({ error: "Cloudinary upload failed" }, { status: 500 });
-            }
+
+            const result = await cloudinary.v2.uploader.upload(base64String, {
+                folder: "poster",
+                resource_type: "auto",
+            });
+            imageUrl = result.secure_url;
+
         }
 
         post.image = imageUrl;

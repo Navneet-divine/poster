@@ -6,9 +6,9 @@ import { verifyJWT } from "@/utils/tokenUtils";
 
 connectDB();
 
-export async function POST(req: NextRequest, { params }: { params: { postId: string } }) {
+export async function POST(req: NextRequest, context: { params: { postId: string } }) {
     try {
-        const { postId } = params;
+        const { postId } = context.params; // ✅ Correct way to extract params in Next.js App Router
         const token = req.cookies.get("token")?.value;
 
         if (!token) {
@@ -16,7 +16,6 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
         }
 
         const userId = verifyJWT(token);
-
         if (!userId) {
             return NextResponse.json({ error: "Unauthorized: Invalid token" }, { status: 401 });
         }
@@ -24,13 +23,8 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
         const user = await User.findById(userId);
         const post = await Post.findById(postId);
 
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
-        }
-
-        if (!post) {
-            return NextResponse.json({ error: "Post not found" }, { status: 404 });
-        }
+        if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+        if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
 
         const isAlreadyBooked = user.bookedPost.includes(postId);
         if (isAlreadyBooked) {
@@ -48,10 +42,6 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
 
         return NextResponse.json({ msg: isAlreadyBooked ? "Booking removed" : "Booked successfully" }, { status: 200 });
     } catch (error) {
-        if (error instanceof Error) {
-            return NextResponse.json({ error: error.message }, { status: 500 });
-        }
-
-        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
+        return NextResponse.json({ error: error instanceof Error ? error.message : "An unexpected error occurred" }, { status: 500 });
     }
 }

@@ -183,7 +183,9 @@ export default function AppHeroContent() {
         setNotification({
           title: "Error",
           message:
-            (error as any).response?.data?.message || "Registration failed",
+            (error as { response?: { data?: { message?: string } } }).response
+              ?.data?.message || "Registration failed",
+
           color: "red",
         });
       } else {
@@ -250,7 +252,9 @@ export default function AppHeroContent() {
         setNotification({
           title: "Login Failed",
           message:
-            (error as any).response?.data?.message || "Invalid credentials",
+            (error as { response?: { data?: { message?: string } } }).response
+              ?.data?.message || "Invalid credentials",
+
           color: "red",
         });
       } else {
@@ -448,7 +452,7 @@ export default function AppHeroContent() {
                     className="hover:underline cursor-pointer dark:text-dark-50"
                     onClick={switchToRegister}
                   >
-                    Don't have an account? Register
+                    Don&#39;t have an account? Register
                   </p>
                   <Button type="submit" variant="filled" color="pink" size="sm">
                     Login

@@ -59,12 +59,12 @@ const Saved: React.FC = () => {
       <Header />
       <Sidebar />
       <MainContent>
-        <div className="flex flex-col sm:flex-row flex-wrap min-h-screen p-5 pb-20">
+        <div className="flex flex-col sm:flex-row flex-wrap min-h-screen p-5 pt-0 pb-20">
           {loading ? (
             [...Array(3)].map((_, index) => (
               <div
                 key={index}
-                className="w-full rounded-3xl mt-10 h-[20rem] border dark:border-dark-500 lg:w-[20rem] lg:mr-5"
+                className="w-full rounded-3xl  h-[20rem] border dark:border-dark-500 lg:w-[20rem] lg:mr-5"
               >
                 <Skeleton height="100%" width="100%" radius="xl" />
               </div>
@@ -72,11 +72,11 @@ const Saved: React.FC = () => {
           ) : bookedPosts.length > 0 ? (
             bookedPosts.map((bookPost) => (
               <Link href={`/post-detail/${bookPost._id}`} key={bookPost._id}>
-                <div className="w-full rounded-3xl mt-10 h-[20rem] border dark:border-dark-500 lg:w-[20rem] lg:mr-5 cursor-pointer">
+                <div className="w-full rounded-3xl mt-10 h-[20rem] border dark:border-dark-500 lg:w-[20rem] lg:mr-5 cursor-pointer relative">
                   <Image
                     src={bookPost.image}
                     alt="book post img"
-                    className="object-cover w-full h-[20rem] rounded-3xl"
+                    className="object-cover w-full h-full rounded-3xl"
                     layout="fill"
                     objectFit="cover"
                   />

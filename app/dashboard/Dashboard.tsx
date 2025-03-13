@@ -228,7 +228,7 @@ export default function Dashboard() {
                         <p className="font-inter text-xs text-gray-500">
                           {formatDistanceToNow(new Date(post.createdAt), {
                             addSuffix: true,
-                          })}{" "}
+                          })}
                           - {post.location}
                         </p>
                       </div>

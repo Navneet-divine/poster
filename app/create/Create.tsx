@@ -99,13 +99,9 @@ const Create: React.FC = () => {
         setErrors((prev) => ({ ...prev, location: "" }));
       }
 
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/create-post`,
-        fd,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const res = await axios.post(`/api/posts/create-post`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       console.log("Response:", res.data);
       router.push("/dashboard");

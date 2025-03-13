@@ -4,7 +4,7 @@ import User from "@/models/userModel";
 import { verifyJWT } from "@/utils/tokenUtils";
 import { connectDB } from "@/lib/db";
 
-// Configure Cloudinary
+
 cloudinary.v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -13,7 +13,7 @@ cloudinary.v2.config({
 
 export async function POST(req: NextRequest) {
     try {
-        // Verify user authentication
+
         const token = req.cookies.get("token")?.value;
         if (!token) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
         await connectDB()
 
-        // Get FormData
+
         const formData = await req.formData();
         const file = formData.get("avatar") as File | null;
 
@@ -32,18 +32,18 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
         }
 
-        // Convert file to base64
+
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-        // Upload to Cloudinary
+
         const result = await cloudinary.v2.uploader.upload(base64String, {
-            folder: "poster", // Change the folder name as needed
+            folder: "poster",
             resource_type: "auto",
         });
 
-        // Update user profile in database
+
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             { avatar: result.secure_url },
@@ -60,7 +60,12 @@ export async function POST(req: NextRequest) {
             user: updatedUser
         }, { status: 200 });
 
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

@@ -50,8 +50,12 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
         await post.save();
 
         return NextResponse.json({ msg: isAlreadyBooked ? "Booking removed" : "Booked successfully" }, { status: 200 });
-    } catch (e: any) {
-        console.error(e); // Log the error for debugging
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

@@ -37,7 +37,12 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ message: "Password updated successfully" }, { status: 200 });
 
-    } catch (e: any) {
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, FormEvent } from "react";
+import { useState, useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/UI/Footer";
 import MainContent from "@/components/UI/MainContent";
@@ -83,7 +83,7 @@ const Create: React.FC = () => {
         setErrors((prev) => ({ ...prev, image: "Image is required" }));
         return;
       } else {
-        setErrors((prev) => ({ ...prev, image: "" }));  
+        setErrors((prev) => ({ ...prev, image: "" }));
       }
 
       if (!formData.location) {

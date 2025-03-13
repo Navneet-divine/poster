@@ -173,7 +173,7 @@ export default function AppHeroContent() {
         }));
       }
 
-      const res = await axios.post("/api/auth/register", data);
+      await axios.post("/api/auth/register", data);
 
       closeRegister();
       router.push("/dashboard");
@@ -195,14 +195,11 @@ export default function AppHeroContent() {
 
     console.log("hello");
 
-    // Clear previous errors
     setLoginError({ email: "", password: "" });
 
-    // Extract values from refs
     const email = logiEmailRef.current?.value.trim() || "";
     const password = loginPasswordRef.current?.value.trim() || "";
 
-    // Validate Email
     if (!email) {
       setLoginError((prevErr) => ({ ...prevErr, email: "Email is required" }));
       return;
@@ -215,7 +212,6 @@ export default function AppHeroContent() {
       return;
     }
 
-    // Validate Password
     if (!password) {
       setLoginError((prevErr) => ({
         ...prevErr,
@@ -235,7 +231,7 @@ export default function AppHeroContent() {
     }
 
     try {
-      const res = await axios.post("/api/auth/login", { email, password });
+      await axios.post("/api/auth/login", { email, password });
 
       closeLogin();
       router.push("/dashboard");
@@ -280,7 +276,8 @@ export default function AppHeroContent() {
                       placeholder="First Name"
                       className="mb-3 "
                       classNames={{
-                        input: "dark:bg-dark-600 dark:border-none dark:text-white",
+                        input:
+                          "dark:bg-dark-600 dark:border-none dark:text-white",
                         label: "dark:text-dark-50",
                       }}
                       autoComplete="off"
@@ -300,7 +297,8 @@ export default function AppHeroContent() {
                       placeholder="Last Name"
                       className="mb-3"
                       classNames={{
-                        input: "dark:bg-dark-600 dark:border-none dark:text-white",
+                        input:
+                          "dark:bg-dark-600 dark:border-none dark:text-white",
                         label: "dark:text-dark-50",
                       }}
                       autoComplete="off"
@@ -414,10 +412,8 @@ export default function AppHeroContent() {
                   placeholder="Password"
                   className="mt-2"
                   classNames={{
-                    input:
-                      "dark:bg-dark-600 dark:border-none dark:text-white ",
+                    input: "dark:bg-dark-600 dark:border-none dark:text-white ",
                     label: "dark:text-dark-50",
-                  
                   }}
                   autoComplete="off"
                   styles={{

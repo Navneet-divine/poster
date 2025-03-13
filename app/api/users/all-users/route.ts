@@ -24,8 +24,12 @@ export async function GET(req: NextRequest) {
             hasMore: totalUsers > page * limit,
         }, { status: 200 });
 
-    } catch (e: any) {
-        console.error("Error:", e.message);
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

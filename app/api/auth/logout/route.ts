@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 connectDB();
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
 
         const response = NextResponse.json({
@@ -20,8 +20,13 @@ export async function GET(request: NextRequest) {
 
         return response
 
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }
 

@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/db";
 import User from "@/models/userModel";
 import { verifyJWT } from "@/utils/tokenUtils";
 
-// Establish DB connection
+
 connectDB();
 
 export async function GET(req: NextRequest) {
@@ -28,8 +28,12 @@ export async function GET(req: NextRequest) {
 
 
         return NextResponse.json({ msg: "Booked posts retrieved successfully", posts: user.bookedPost }, { status: 200 });
-    } catch (e: any) {
+    } catch (error: unknown) {
 
-        return NextResponse.json({ error: e.message }, { status: 500 });
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

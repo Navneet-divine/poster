@@ -28,7 +28,12 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
 
         return NextResponse.json({ msg: "Post is deleted", deletedPost }, { status: 200 });
 
-    } catch (e: any) {
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

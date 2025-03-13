@@ -4,7 +4,7 @@ import Post from "@/models/postModel";
 
 connectDB();
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const posts = await Post.find({}).populate("author");
 
@@ -14,8 +14,12 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json({ posts }, { status: 200 });
 
-    } catch (e: any) {
-        console.log(e.message);
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

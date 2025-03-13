@@ -66,8 +66,12 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
         await post.save();
 
         return NextResponse.json({ msg: "Post updated successfully" }, { status: 200 });
-    } catch (error: any) {
-        console.log(error.message);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

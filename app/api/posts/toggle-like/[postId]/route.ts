@@ -1,5 +1,3 @@
-// backend/api/posts/toggle-like/[postId].ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Post from "@/models/postModel";
@@ -26,23 +24,28 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
       return NextResponse.json({ msg: "Post not found" }, { status: 404 });
     }
 
-    // Toggle like/unlike for the specific user
+
     if (!post.likedBy.includes(userId)) {
-      post.likedBy.push(userId); // Add the user to the likedBy array
+      post.likedBy.push(userId);
       post.likes++;
-      post.isLiked = true; // Update the post's isLiked flag
+      post.isLiked = true;
     } else {
-      post.likedBy = post.likedBy.filter((id: any) => id.toString() !== userId); // Remove the user from the likedBy array
-      post.likes = Math.max(0, post.likes - 1); // Decrease the like count, ensuring it doesn't go negative
-      post.isLiked = false; // Update the post's isLiked flag
+
+      post.likedBy = post.likedBy.filter((id: string) => id.toString() !== userId.toString());
+      post.likes = Math.max(0, post.likes - 1);
+      post.isLiked = false;
     }
 
     await post.save();
 
-    // Return the updated post with the isLiked status for the current user
+
     return NextResponse.json({ msg: "Post like status updated", post }, { status: 200 });
-  } catch (error: any) {
-    console.error("Error:", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
   }
 }

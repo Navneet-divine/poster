@@ -38,7 +38,12 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ msg: "Form submitted successfully!" }, { status: 200 });
 
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message || "Something went wrong!" }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

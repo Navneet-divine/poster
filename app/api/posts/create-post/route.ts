@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
         });
 
 
-        const post = await Post.create({
+        await Post.create({
             image: result.secure_url,
             caption: formData.get("caption") as string,
             location: formData.get("location") as string,
@@ -58,8 +58,12 @@ export async function POST(req: NextRequest) {
 
 
         return NextResponse.json({ msg: "Post created successfully" }, { status: 200 });
-    } catch (error: any) {
-        console.log(error.message);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

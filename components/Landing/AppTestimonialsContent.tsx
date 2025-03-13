@@ -41,10 +41,10 @@ export default function AppTestimonialsContent() {
               <span className="font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 @poster
               </span>
-              made all the difference. Their approach to teaching was practical,
-              empowering, and always tailored to my needs. I&#39;m forever
+              made all the difference. Their approach to teaching was practical&#44;
+              empowering&#44; and always tailored to my needs. I&#39;m forever
               grateful for the confidence they instilled in me. If you&#39;re
-              looking to level up your career&#44; this is the place to be!"
+              looking to level up your career&#44; this is the place to be!&#34;
             </p>
           </div>
 

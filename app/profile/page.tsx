@@ -98,7 +98,7 @@ const Profile: React.FC = () => {
     const lastName = lastNameRef.current?.value.trim();
     const email = emailRef.current?.value.trim();
 
-    if (firstName?.length! < 2) {
+    if (firstName && firstName.length < 2) {
       setFormData((prevValue) => ({
         ...prevValue,
         firstName: "Name must be 2 characters long.",
@@ -111,7 +111,7 @@ const Profile: React.FC = () => {
       }));
     }
 
-    if (lastName?.length! < 2) {
+    if (lastName && lastName.length < 2) {
       setFormData((prevValue) => ({
         ...prevValue,
         lastName: "Last name must be 2 characters long.",
@@ -124,7 +124,7 @@ const Profile: React.FC = () => {
       }));
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email!)) {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setFormData((prevErr) => ({
         ...prevErr,
         email: "Invalid email format",
@@ -138,8 +138,12 @@ const Profile: React.FC = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-    } catch (e: any) {
-      console.log(e.message);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      } else {
+        console.log("An unexpected error occurred");
+      }
     }
   }
 
@@ -199,8 +203,12 @@ const Profile: React.FC = () => {
       const data = Object.fromEntries(formData.entries());
 
       await axios.post("/api/users/reset-password", data);
-    } catch (e: any) {
-      alert(e.message);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        alert(e.message);
+      } else {
+        alert("An unexpected error occurred");
+      }
     } finally {
       oldPasswordRef.current!.value = "";
       newPasswordRef.current!.value = "";
@@ -212,8 +220,12 @@ const Profile: React.FC = () => {
     try {
       await axios.get("/api/auth/logout");
       router.push("/");
-    } catch (e: any) {
-      console.log(e.message);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      } else {
+        console.log("An unexpected error occurred");
+      }
     }
   }
 
@@ -236,8 +248,12 @@ const Profile: React.FC = () => {
         const res = await axios.post("/api/users/profile-avatar", formData);
         console.log(res.data.user.avatar);
         setAvatarUrl(res.data.user.avatar);
-      } catch (e: any) {
-        alert(e.message);
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          alert(e.message);
+        } else {
+          alert("An unknown error occurred");
+        }
       } finally {
         setAvatarLoading(false);
       }

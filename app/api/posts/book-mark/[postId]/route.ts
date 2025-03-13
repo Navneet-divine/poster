@@ -32,26 +32,22 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
             return NextResponse.json({ error: "Post not found" }, { status: 404 });
         }
 
-
         const isAlreadyBooked = user.bookedPost.includes(postId);
         if (isAlreadyBooked) {
-
             user.bookedPost = user.bookedPost.filter((id: string) => id.toString() !== postId);
             post.bookedBy = post.bookedBy.filter((id: string) => id.toString() !== userId);
-            post.isBooked = false
+            post.isBooked = false;
         } else {
-
             user.bookedPost.push(postId);
             post.bookedBy.push(userId);
-            post.isBooked = true
+            post.isBooked = true;
         }
 
         await user.save();
         await post.save();
 
         return NextResponse.json({ msg: isAlreadyBooked ? "Booking removed" : "Booked successfully" }, { status: 200 });
-    } catch (error: unknown) {
-
+    } catch (error) {
         if (error instanceof Error) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }

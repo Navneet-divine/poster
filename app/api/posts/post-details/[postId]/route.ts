@@ -7,10 +7,10 @@ connectDB()
 export async function GET(req: NextRequest, { params }: { params: { postId: string } }) {
     try {
         const { postId } = params
-        console.log(postId)
+
 
         const post = await Post.findById(postId).populate("author")
-        console.log(post)
+
 
         if (!post) {
             return NextResponse.json({ msg: "post is not found." }, { status: 400 })

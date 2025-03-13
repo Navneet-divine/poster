@@ -25,7 +25,7 @@ const Create: React.FC = () => {
     caption: "",
     location: "",
     image: null as File | null,
-    preview: "", // New state for image preview
+    preview: "",
   });
 
   function handleFileInput() {
@@ -44,7 +44,6 @@ const Create: React.FC = () => {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] || null;
     if (file) {
-      // Create a preview URL for the selected file
       const previewUrl = URL.createObjectURL(file);
       setFormData((prev) => ({
         ...prev,
@@ -99,7 +98,7 @@ const Create: React.FC = () => {
         setErrors((prev) => ({ ...prev, location: "" }));
       }
 
-      const res = await axios.post("/api/posts/create-post", fd, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/create-post`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -111,7 +110,6 @@ const Create: React.FC = () => {
       setLoader(false);
     }
 
-    // Log formData state
     console.log("Form Data:", {
       caption: formData.caption,
       location: formData.location,

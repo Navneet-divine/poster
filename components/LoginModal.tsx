@@ -1,5 +1,4 @@
-import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button } from "@mantine/core";
+import { Modal } from "@mantine/core";
 
 const LoginModal: React.FC<{
   children: React.ReactNode;

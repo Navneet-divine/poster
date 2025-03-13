@@ -6,14 +6,14 @@ import Sidebar from "@/components/UI/Sidebar";
 import MainContent from "@/components/UI/MainContent";
 import { useParams, useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
-import { MdEditSquare } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
+import { MdEditSquare, MdDelete } from "react-icons/md";
 import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa";
 import { PiBookmarkSimpleLight, PiBookmarkSimpleFill } from "react-icons/pi";
 import axios from "axios";
 import Footer from "@/components/UI/Footer";
 import Link from "next/link";
 import { Skeleton } from "@mantine/core";
+import Image from "next/image";
 
 interface Post {
   image: string;
@@ -130,15 +130,15 @@ export default function PostDetail() {
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-1/2">
                 {post ? (
-                  <img
+                  <Image
                     src={post.image}
                     alt="postImg"
                     className="rounded-3xl object-cover h-[20rem] w-full"
+                    width={500}
+                    height={500}
                   />
                 ) : (
-                  <>
-                    <Skeleton height={300} radius="xl" />
-                  </>
+                  <Skeleton height={300} radius="xl" />
                 )}
               </div>
 
@@ -148,10 +148,12 @@ export default function PostDetail() {
                     {post ? (
                       post.author.avatar ? (
                         <div className="rounded-full h-12 w-12 bg-pink">
-                          <img
+                          <Image
                             src={post.author.avatar}
                             alt="authorAvatar"
                             className="rounded-3xl object-cover h-12 w-12"
+                            width={48}
+                            height={48}
                           />
                         </div>
                       ) : (

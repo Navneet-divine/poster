@@ -46,10 +46,8 @@ const People: React.FC = () => {
           );
           return [...prevUsers, ...newUsers];
         });
-        console.log(res.data.hasMore);
         setHasMore(res.data.hasMore);
       } else {
-        // If no users returned, set hasMore to false
         setHasMore(false);
       }
       setLoading(false);

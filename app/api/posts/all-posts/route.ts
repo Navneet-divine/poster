@@ -14,8 +14,7 @@ export async function GET() {
 
         return NextResponse.json({ posts }, { status: 200 });
 
-    } catch (error: unknown) {
-
+    } catch (error) {
         if (error instanceof Error) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }

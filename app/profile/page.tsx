@@ -6,11 +6,16 @@ import Header from "@/components/Header";
 import Sidebar from "@/components/UI/Sidebar";
 import MainContent from "@/components/UI/MainContent";
 import Footer from "@/components/UI/Footer";
-import { Button, PasswordInput, TextInput, Skeleton } from "@mantine/core";
+import {
+  Button,
+  PasswordInput,
+  TextInput,
+  Skeleton,
+  Loader,
+} from "@mantine/core";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
-import { Loader } from "@mantine/core";
-import { set } from "mongoose";
+import Image from "next/image";
 
 interface User {
   firstName?: string;
@@ -46,7 +51,7 @@ const Profile: React.FC = () => {
   });
   const [avatar, setAvatar] = useState<File | null>(null);
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [avtarLoading, setAvatarLoading] = useState(false);
+  const [avatarLoading, setAvatarLoading] = useState(false);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { theme } = useTheme();
@@ -82,7 +87,7 @@ const Profile: React.FC = () => {
     };
 
     fetchProfileData();
-    console.log("re-redner");
+    console.log("re-render");
   }, [avatarUrl]);
 
   async function handleEditProfile(event: React.FormEvent) {
@@ -95,37 +100,29 @@ const Profile: React.FC = () => {
     const email = emailRef.current?.value.trim();
 
     if (firstName?.length! < 2) {
-      setFormData((prevValue) => {
-        return {
-          ...prevValue,
-          firstName: "Name must be 2 characters long.",
-        };
-      });
+      setFormData((prevValue) => ({
+        ...prevValue,
+        firstName: "Name must be 2 characters long.",
+      }));
       return;
     } else {
-      setFormData((prevValue) => {
-        return {
-          ...prevValue,
-          firstName: "",
-        };
-      });
+      setFormData((prevValue) => ({
+        ...prevValue,
+        firstName: "",
+      }));
     }
 
     if (lastName?.length! < 2) {
-      setFormData((prevValue) => {
-        return {
-          ...prevValue,
-          lastName: "last name must be 2 characters long.",
-        };
-      });
+      setFormData((prevValue) => ({
+        ...prevValue,
+        lastName: "Last name must be 2 characters long.",
+      }));
       return;
     } else {
-      setFormData((prevValue) => {
-        return {
-          ...prevValue,
-          lastName: "",
-        };
-      });
+      setFormData((prevValue) => ({
+        ...prevValue,
+        lastName: "",
+      }));
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email!)) {
@@ -137,7 +134,7 @@ const Profile: React.FC = () => {
     }
 
     try {
-      const res = await axios.post("/api/users/edit-profile", data, {
+      await axios.post("/api/users/edit-profile", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -198,24 +195,11 @@ const Profile: React.FC = () => {
       }));
     }
 
-    if (newPassword !== confirmPassword) {
-      setFormData((prevErr) => ({
-        ...prevErr,
-        confirmPassword: "Passwords do not match",
-      }));
-      return;
-    } else {
-      setFormData((prevErr) => ({
-        ...prevErr,
-        confirmPassword: "",
-      }));
-    }
-
     try {
       const formData = new FormData(event.target as HTMLFormElement);
       const data = Object.fromEntries(formData.entries());
 
-      const res = await axios.post("/api/users/reset-password", data);
+      await axios.post("/api/users/reset-password", data);
     } catch (e: any) {
       alert(e.message);
     } finally {
@@ -227,7 +211,7 @@ const Profile: React.FC = () => {
 
   async function handleLogout() {
     try {
-      const res = await axios.get("/api/auth/logout");
+      await axios.get("/api/auth/logout");
       router.push("/");
     } catch (e: any) {
       console.log(e.message);
@@ -287,14 +271,16 @@ const Profile: React.FC = () => {
                       onClick={handleClickProfile}
                       className="flex items-center justify-center  rounded-full h-36 w-36 text-2xl text-white font-montserrat hover:cursor-pointer"
                     >
-                      {avtarLoading ? (
+                      {avatarLoading ? (
                         <Loader type="bars" color="pink" />
                       ) : (
-                        <img
+                        <Image
                           key={user.avatar}
                           src={user.avatar}
                           alt="Profile avatar"
                           className="rounded-full w-36 h-36 object-cover"
+                          width={144}
+                          height={144}
                         />
                       )}
                     </div>

@@ -5,10 +5,10 @@ import Post from "@/models/postModel";
 
 connectDB();
 
-export async function GET(req: NextRequest, { params }: { params: { postId: string | string[] } }) {
+export async function GET({ params }: { params: { postId: string | string[] } }) {
     try {
         const { postId } = params;
-        console.log(postId);
+
 
         if (Array.isArray(postId)) {
             return NextResponse.json({ msg: "Invalid postId." }, { status: 400 });

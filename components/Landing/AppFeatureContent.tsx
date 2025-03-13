@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const FEATURE_DATA = [
   {
     title: "Express Your Thoughts with Ease",
@@ -21,8 +23,8 @@ export default function AppPostingContent() {
     <section className="flex flex-col px-5 mt-28 min-h-[40vh] sm:min-h-[60vh]">
       {/* Container for the text */}
       <div className="flex flex-col justify-between items-center text-center h-full">
-        <div className="mb-3 border-pink-500 w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%]  border-b-2 pb-2">
-          <h1 className="font-raleway text-2xl sm:text-3xl md:text-4xl    pb-3 text-center hover:scale-105 transition-transform duration-200 ease-in-out inline-block mx-auto dark:text-dark-200">
+        <div className="mb-3 border-pink-500 w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%] border-b-2 pb-2">
+          <h1 className="font-raleway text-2xl sm:text-3xl md:text-4xl pb-3 text-center hover:scale-105 transition-transform duration-200 ease-in-out inline-block mx-auto dark:text-dark-200">
             We will make you fall in posting posts
           </h1>
         </div>
@@ -34,11 +36,11 @@ export default function AppPostingContent() {
               return (
                 <div key={index} className="flex flex-col items-center mb-22">
                   <div className="mt-3 flex justify-center rounded-blob-2 bg-gradient-to-r from-purple-500 to-pink-500 w-48 h-48 mb-3">
-                    <img
+                    <Image
                       src={f.image}
                       className="hover:scale-105 transition-transform duration-200 ease-in-out"
-                      width="300px"
-                      height="300px"
+                      width={300}
+                      height={300}
                       alt={`Feature image ${index + 1}`}
                     />
                   </div>

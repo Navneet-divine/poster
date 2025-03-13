@@ -6,6 +6,7 @@ import MainContent from "@/components/UI/MainContent";
 import Sidebar from "@/components/UI/Sidebar";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import noDataImg from "@/public/imgs/no-data.webp";
 import Link from "next/link";
 import { Skeleton } from "@mantine/core";
@@ -68,10 +69,12 @@ const Saved: React.FC = () => {
             bookedPosts.map((bookPost) => (
               <Link href={`/post-detail/${bookPost._id}`} key={bookPost._id}>
                 <div className="w-full rounded-3xl mt-10 h-[20rem] border dark:border-dark-500 lg:w-[20rem] lg:mr-5 cursor-pointer">
-                  <img
+                  <Image
                     src={bookPost.image}
                     alt="book post img"
                     className="object-cover w-full h-[20rem] rounded-3xl"
+                    layout="fill"
+                    objectFit="cover"
                   />
                 </div>
               </Link>
@@ -85,10 +88,12 @@ const Saved: React.FC = () => {
               </div>
 
               <div className="flex justify-center w-full">
-                <img
+                <Image
                   src={noDataImg.src}
                   alt="no-data Img"
                   className="h-[15rem] sm:h-[20rem] md:h-[25rem]"
+                  width={500}
+                  height={500}
                 />
               </div>
             </>

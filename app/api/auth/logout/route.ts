@@ -5,23 +5,20 @@ connectDB();
 
 export async function GET() {
     try {
-
         const response = NextResponse.json({
             msg: "user logged out!",
-            success: true
-        })
+            success: true,
+        });
 
         response.cookies.set("token", "", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             expires: new Date(0),
-            path: "/"
+            path: "/",
         });
 
-        return response
-
-    } catch (error: unknown) {
-
+        return response;
+    } catch (error) {
         if (error instanceof Error) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
@@ -29,4 +26,3 @@ export async function GET() {
         return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }
-

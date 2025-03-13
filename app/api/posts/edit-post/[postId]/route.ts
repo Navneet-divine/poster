@@ -51,12 +51,15 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
             const buffer = Buffer.from(arrayBuffer);
             const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-            const result = await cloudinary.v2.uploader.upload(base64String, {
-                folder: "poster",
-                resource_type: "auto",
-            });
-
-            imageUrl = result.secure_url;
+            try {
+                const result = await cloudinary.v2.uploader.upload(base64String, {
+                    folder: "poster",
+                    resource_type: "auto",
+                });
+                imageUrl = result.secure_url;
+            } catch (cloudinaryError) {
+                return NextResponse.json({ error: "Cloudinary upload failed" }, { status: 500 });
+            }
         }
 
         post.image = imageUrl;
@@ -67,7 +70,6 @@ export async function POST(req: NextRequest, { params }: { params: { postId: str
 
         return NextResponse.json({ msg: "Post updated successfully" }, { status: 200 });
     } catch (error: unknown) {
-
         if (error instanceof Error) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }

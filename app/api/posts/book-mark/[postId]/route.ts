@@ -7,8 +7,9 @@ import { verifyJWT } from "@/utils/tokenUtils";
 connectDB();
 
 export async function POST(
-    req: NextRequest,
-    { params }: { params: Record<string, string> }
+    { params }: { params: Record<string, string> },
+    req: NextRequest
+
 ) {
     try {
         const postId = params.postId;

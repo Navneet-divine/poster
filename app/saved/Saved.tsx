@@ -69,7 +69,7 @@ const Saved: React.FC = () => {
                 <Skeleton height="100%" width="100%" radius="xl" />
               </div>
             ))
-          ) : bookedPosts.length > 0 ? (
+          ) : bookedPosts ? (
             bookedPosts.map((bookPost) => (
               <Link href={`/post-detail/${bookPost._id}`} key={bookPost._id}>
                 <div className="w-full rounded-3xl mt-10 h-[20rem] border dark:border-dark-500 lg:w-[20rem] lg:mr-5 cursor-pointer relative">

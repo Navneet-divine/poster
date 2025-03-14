@@ -4,28 +4,27 @@ import Post from "@/models/postModel";
 
 connectDB();
 
-export async function GET({ params }: { params: { postId: string | string[] } }) {
+export async function GET({ params }: { params: Promise<{ postId: string }> }) {
     try {
-        const { postId } = params;
+        const { postId } = await params;
 
-        // If postId is an array, return a bad request response
         if (Array.isArray(postId)) {
             return NextResponse.json({ msg: "Invalid postId." }, { status: 400 });
         }
 
-        // Fetch the post from the database using the postId
+
         const post = await Post.findById(postId);
 
-        // If post not found, return an error message
+
         if (!post) {
             return NextResponse.json({ msg: "Post not found." }, { status: 404 });
         }
 
-        // Return the post data as JSON
+
         return NextResponse.json(post, { status: 200 });
 
     } catch (error: unknown) {
-        // Return the error message if an unexpected error occurs
+
         if (error instanceof Error) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }

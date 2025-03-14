@@ -8,10 +8,10 @@ connectDB();
 
 export async function POST(
     req: NextRequest,
-    { params }: { params: { postId: string } }
+    { params }: { params: Record<string, string> }
 ) {
     try {
-        const { postId } = params; // ✅ Extract postId correctly
+        const postId = params.postId;
         const token = req.cookies.get("token")?.value;
 
         if (!token) {

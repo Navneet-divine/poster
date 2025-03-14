@@ -6,10 +6,13 @@ import { verifyJWT } from "@/utils/tokenUtils";
 
 connectDB();
 
-export async function POST(req: NextRequest, context: { params: { postId: string } }) {
+export async function POST(
+    request: NextRequest,
+    { params }: { params: { postId: string } }
+) {
     try {
-        const { postId } = context.params;
-        const token = req.cookies.get("token")?.value;
+        const { postId } = params;
+        const token = request.cookies.get("token")?.value;
 
         if (!token) {
             return NextResponse.json({ error: "Unauthorized: No token provided" }, { status: 401 });

@@ -4,9 +4,9 @@ import Post from "@/models/postModel";
 
 connectDB()
 
-export async function GET(req: NextRequest, { params }: { params: { postId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
     try {
-        const { postId } = params
+        const { postId } = await params
 
 
         const post = await Post.findById(postId).populate("author")

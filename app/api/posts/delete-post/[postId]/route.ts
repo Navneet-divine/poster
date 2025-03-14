@@ -6,9 +6,9 @@ import { verifyJWT } from "@/utils/tokenUtils";
 
 connectDB();
 
-export async function POST(req: NextRequest, { params }: { params: { postId: string | string[] } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ postId: string | string[] }> }) {
   try {
-    const { postId } = params;
+    const { postId } = await params;
 
     if (Array.isArray(postId)) {
       return NextResponse.json({ msg: "Invalid postId." }, { status: 400 });

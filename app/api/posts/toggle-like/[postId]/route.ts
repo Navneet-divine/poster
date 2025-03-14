@@ -9,9 +9,9 @@ export const config = {
   api: { bodyParser: false },
 };
 
-export async function POST(req: NextRequest, { params }: { params: { postId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
   try {
-    const { postId } = params;
+    const { postId } = await params;
 
     const token = req.cookies.get("token")?.value;
     if (!token) {

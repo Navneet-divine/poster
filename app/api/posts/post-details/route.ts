@@ -1,13 +1,13 @@
-import { NextResponse} from "next/server";
+import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Post from "@/models/postModel";
 
 
 connectDB();
 
-export async function GET({ params }: { params: { postId: string | string[] } }) {
+export async function GET({ params }: { params: Promise<{ postId: string | string[] }> }) {
     try {
-        const { postId } = params;
+        const { postId } = await params;
 
 
         if (Array.isArray(postId)) {

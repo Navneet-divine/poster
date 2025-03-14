@@ -38,7 +38,7 @@ const Saved: React.FC = () => {
       try {
         const res = await axios.get("/api/posts/render-bookedPost");
         setTimeout(() => {
-          setBookedPosts(res.data.posts);
+          setBookedPosts(res.data.posts || []);
           setLoading(false);
         }, 1000);
       } catch (e: unknown) {

@@ -6,13 +6,9 @@ import { verifyJWT } from "@/utils/tokenUtils";
 
 connectDB();
 
-export async function POST(
-    { params }: { params: Record<string, string> },
-    req: NextRequest
-
-) {
+export async function POST(req: NextRequest, context: { params: { postId: string } }) {
     try {
-        const postId = params.postId;
+        const { postId } = context.params;
         const token = req.cookies.get("token")?.value;
 
         if (!token) {
@@ -27,8 +23,13 @@ export async function POST(
         const user = await User.findById(userId);
         const post = await Post.findById(postId);
 
-        if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
-        if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+        if (!user) {
+            return NextResponse.json({ error: "User not found" }, { status: 404 });
+        }
+
+        if (!post) {
+            return NextResponse.json({ error: "Post not found" }, { status: 404 });
+        }
 
         const isAlreadyBooked = user.bookedPost.includes(postId);
         if (isAlreadyBooked) {
@@ -46,6 +47,10 @@ export async function POST(
 
         return NextResponse.json({ msg: isAlreadyBooked ? "Booking removed" : "Booked successfully" }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: error instanceof Error ? error.message : "An unexpected error occurred" }, { status: 500 });
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }

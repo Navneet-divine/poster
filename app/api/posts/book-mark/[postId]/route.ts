@@ -6,9 +6,12 @@ import { verifyJWT } from "@/utils/tokenUtils";
 
 connectDB();
 
-export async function POST(req: NextRequest, context: { params: { postId: string } }) {
+export async function POST(
+    req: NextRequest,
+    { params }: { params: { postId: string } }
+) {
     try {
-        const { postId } = context.params; // ✅ Correct way to extract params in Next.js App Router
+        const { postId } = params; // ✅ Extract postId correctly
         const token = req.cookies.get("token")?.value;
 
         if (!token) {

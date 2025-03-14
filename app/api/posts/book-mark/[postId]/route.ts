@@ -8,7 +8,7 @@ connectDB();
 
 export async function POST(req: NextRequest, context: { params: { postId: string } }) {
     try {
-        const { postId } = await context.params;
+        const { postId } = context.params;
         const token = req.cookies.get("token")?.value;
 
         if (!token) {

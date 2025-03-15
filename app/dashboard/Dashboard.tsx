@@ -13,7 +13,6 @@ import Link from "next/link";
 import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa";
 import { PiBookmarkSimpleLight, PiBookmarkSimpleFill } from "react-icons/pi";
 import { Skeleton } from "@mantine/core";
-import Head from "next/head";
 import Image from "next/image";
 
 interface Post {
@@ -153,13 +152,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <Head>
-        <title>Poster | Dashboard</title>
-        <meta
-          name="description"
-          content="Your dashboard for posts and updates"
-        />
-      </Head>
       <Header />
       <Sidebar />
       <MainContent>
@@ -233,7 +225,11 @@ export default function Dashboard() {
                         </p>
                       </div>
                       <Link href={`/post-detail/${post._id}`}>
-                        <MdEditSquare className="text-xl text-dark-400 dark:text-dark-100" />
+                        {post.author._id === currentUserId ? (
+                          <MdEditSquare className="text-xl text-dark-400 dark:text-dark-100" />
+                        ) : (
+                          ""
+                        )}
                       </Link>
                     </div>
                   </div>

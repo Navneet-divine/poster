@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <div className="flex top-0 z-50 fixed w-full bg-white dark:bg-dark-700 justify-between items-center border border-t-0 border-l-0 border-r-0 border-b-2 p-3 dark:border-dark-500">
       <div>
-        <Image src="/imgs/favicon.ico" alt="Logo" width={44} height={44} />
+        <Image src="/imgs/favicon.ico" alt="Logo" width={45} height={45} />
       </div>
       <div className="font-dancingScript text-4xl dark:text-dark-50">
         Poster

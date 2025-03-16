@@ -3,10 +3,12 @@ import { connectDB } from "@/lib/db";
 import Post from "@/models/postModel";
 
 
+
 export async function GET() {
     try {
-        await connectDB()
+
         const posts = await Post.find({}).populate("author");
+        connectDB()
 
         if (!posts || posts.length === 0) {
             return NextResponse.json({ msg: "Posts are not created yet!" }, { status: 400 });

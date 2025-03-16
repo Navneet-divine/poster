@@ -8,7 +8,7 @@ export async function GET() {
     try {
 
         const posts = await Post.find({}).populate("author");
-        connectDB()
+        await connectDB()
 
         if (!posts || posts.length === 0) {
             return NextResponse.json({ msg: "Posts are not created yet!" }, { status: 400 });

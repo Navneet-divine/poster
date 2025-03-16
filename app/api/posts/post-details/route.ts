@@ -1,10 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Post from "@/models/postModel";
 
 connectDB();
 
 export async function GET(
+    request: NextRequest,
     { params }: { params: Promise<{ postId: string }> }
 ) {
     try {

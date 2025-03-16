@@ -30,6 +30,7 @@ interface Post {
     firstName: string;
     lastName: string;
     email: string;
+    avatar: string;
     _id: string;
   };
 }
@@ -202,16 +203,27 @@ export default function Dashboard() {
               >
                 <div className="flex flex-col">
                   <div className="flex items-center gap-3">
-                    <div className="h-14 w-16 md:w-[60px] rounded-full bg-pink-500 flex items-center justify-center overflow-hidden">
-                      <h1 className="font-inter text-white text-xl">
-                        {post.author.firstName
-                          ? post.author.firstName[0].toUpperCase()
-                          : "?"}
-                        {post.author.lastName
-                          ? post.author.lastName[0].toUpperCase()
-                          : "?"}
-                      </h1>
-                    </div>
+                    {post.author.avatar ? (
+                      <div className="h-14 w-16 md:w-[60px] rounded-full bg-pink-500 flex items-center justify-center overflow-hidden">
+                        <Image
+                          src={post.author.avatar}
+                          alt="user Image"
+                          className="rounded-full h-14 w-16 "
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-14 w-16 md:w-[60px] rounded-full bg-pink-500 flex items-center justify-center overflow-hidden">
+                        <h1 className="font-inter text-white text-xl">
+                          {post.author.firstName
+                            ? post.author.firstName[0].toUpperCase()
+                            : "?"}
+                          {post.author.lastName
+                            ? post.author.lastName[0].toUpperCase()
+                            : "?"}
+                        </h1>
+                      </div>
+                    )}
+
                     <div className="flex items-center w-full">
                       <div className="w-full">
                         <h1 className="font-bold dark:text-white">

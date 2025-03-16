@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 export const signJwt = (payload: any) => {
     const token = jwt.sign(payload, process.env.TOKEN_SECRET!, {
-        expiresIn: "1d"
+        expiresIn: "7d"
     })
     return token
 }

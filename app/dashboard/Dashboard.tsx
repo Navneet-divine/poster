@@ -10,7 +10,7 @@ import { FaHome } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 import { MdEditSquare } from "react-icons/md";
 import Link from "next/link";
-import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PiBookmarkSimpleLight, PiBookmarkSimpleFill } from "react-icons/pi";
 import { Skeleton } from "@mantine/core";
 import Image from "next/image";
@@ -276,9 +276,6 @@ export default function Dashboard() {
                       <p className="text-lg font-inter dark:text-dark-200 ml-1">
                         {post.likes}
                       </p>
-                      {/* <Link href={`/post-detail/${post._id}`} className="ml-5">
-                        <FaRegComment className="text-xl dark:text-dark-200" />
-                      </Link> */}
                     </div>
                     <button onClick={() => handleBookMark(post._id)}>
                       {post.bookedBy.includes(currentUserId!) ? (

@@ -7,7 +7,7 @@ import MainContent from "@/components/UI/MainContent";
 import { useParams, useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { MdEditSquare, MdDelete } from "react-icons/md";
-import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PiBookmarkSimpleLight, PiBookmarkSimpleFill } from "react-icons/pi";
 import axios from "axios";
 import Footer from "@/components/UI/Footer";
@@ -242,7 +242,6 @@ export default function PostDetail() {
                     <p className="text-lg font-inter dark:text-dark-200 ml-1">
                       {post ? post.likes : <Skeleton width={40} />}
                     </p>
-                    {/* <FaRegComment className="text-xl dark:text-dark-200 ml-5" /> */}
                   </div>
                   <button onClick={() => handleBookMark(postId as string)}>
                     {post?.bookedBy.includes(currentUserId!) ? (

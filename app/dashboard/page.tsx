@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Dashboard from "./Dashboard";
 
 export const metadata: Metadata = {
-  title: "Poster | Create",
+  title: "Poster | Dashboard",
   description: "post landing page",
   icons: {
     icon: "/imgs/favicon.ico",

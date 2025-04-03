@@ -276,9 +276,9 @@ export default function Dashboard() {
                       <p className="text-lg font-inter dark:text-dark-200 ml-1">
                         {post.likes}
                       </p>
-                      <Link href={`/post-detail/${post._id}`} className="ml-5">
+                      {/* <Link href={`/post-detail/${post._id}`} className="ml-5">
                         <FaRegComment className="text-xl dark:text-dark-200" />
-                      </Link>
+                      </Link> */}
                     </div>
                     <button onClick={() => handleBookMark(post._id)}>
                       {post.bookedBy.includes(currentUserId!) ? (

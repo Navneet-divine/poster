@@ -242,7 +242,7 @@ export default function PostDetail() {
                     <p className="text-lg font-inter dark:text-dark-200 ml-1">
                       {post ? post.likes : <Skeleton width={40} />}
                     </p>
-                    <FaRegComment className="text-xl dark:text-dark-200 ml-5" />
+                    {/* <FaRegComment className="text-xl dark:text-dark-200 ml-5" /> */}
                   </div>
                   <button onClick={() => handleBookMark(postId as string)}>
                     {post?.bookedBy.includes(currentUserId!) ? (

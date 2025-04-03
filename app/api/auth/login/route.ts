@@ -12,26 +12,21 @@ export async function POST(request: NextRequest) {
 
         const reqBody = await request.json();
 
-
         const user = await User.findOne({ email: reqBody.email });
 
         if (!user) {
             return NextResponse.json({ msg: "User does not exist" }, { status: 400 });
         }
 
-
         const isMatched = await bcryptjs.compare(reqBody.password, user.password);
 
         if (!isMatched) {
             return NextResponse.json({ msg: "Password is incorrect" }, { status: 400 });
         }
-
-
         const payload = {
             userId: user._id,
             firstName: user.firstName,
         };
-
 
         const token = signJwt(payload);
 

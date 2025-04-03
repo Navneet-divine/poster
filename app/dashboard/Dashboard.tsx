@@ -199,7 +199,7 @@ export default function Dashboard() {
             posts.map((post) => (
               <div
                 key={post._id}
-                className="border border-dark-50 rounded-3xl mt-5 sm:mt-8 mb-7 p-5 w-full md:w-[30rem] lg:w-[45rem] lg:h-[45rem] dark:border-dark-400 dark:border-dark-500"
+                className="border border-dark-50 rounded-3xl mt-5 sm:mt-8 mb-7 p-5 w-full md:w-[30rem] lg:w-[45rem] dark:border-dark-500"
               >
                 <div className="flex flex-col">
                   <div className="flex items-center gap-3">

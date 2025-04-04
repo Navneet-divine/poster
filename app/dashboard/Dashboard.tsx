@@ -133,6 +133,8 @@ export default function Dashboard() {
 
     setPosts(updatedPosts);
 
+    
+
     try {
       await axios.post(`/api/posts/book-mark/${postId}`);
     } catch (error: unknown) {

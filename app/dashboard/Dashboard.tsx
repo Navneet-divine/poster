@@ -204,11 +204,11 @@ export default function Dashboard() {
                 <div className="flex flex-col">
                   <div className="flex items-center gap-3">
                     {post.author.avatar ? (
-                      <div className="h-14 w-14 md:w-[60px] rounded-full bg-pink-500 flex items-center justify-center overflow-hidden flex-shrink-0">
+                      <div className="h-14 w-14 md:w-[60px] rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                         <Image
                           src={post.author.avatar}
                           alt="user Image"
-                          className="rounded-full h-14 w-16"
+                          className="rounded-full h-14 w-14"
                           width={500}
                           height={500}
                         />

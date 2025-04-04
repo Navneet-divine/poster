@@ -159,7 +159,7 @@ export default function PostDetail() {
                   <div className="flex items-center">
                     {post ? (
                       post.author.avatar ? (
-                        <div className="rounded-full h-12 w-12 bg-pink">
+                        <div className="rounded-full h-12 w-12 flex-shrink-0">
                           <Image
                             src={post.author.avatar}
                             alt="authorAvatar"

@@ -137,7 +137,7 @@ export default function PostDetail() {
       <Header />
       <Sidebar />
       <MainContent>
-        <div className="p-5">
+        <div className="p-5 pb-20">
           <div className="border w-full h-full rounded-3xl p-4 dark:border-dark-500">
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-1/2">
@@ -155,7 +155,7 @@ export default function PostDetail() {
               </div>
 
               <div className="lg:ml-5 flex-none lg:w-1/2">
-                <div className="flex justify-between items-center mt-5 border border-t-0 border-l-0 border-r-0 pb-5 dark:border-dark-500">
+                <div className="flex justify-between items-center mt-5  border border-t-0 border-l-0 border-r-0 pb-5 dark:border-dark-500 ">
                   <div className="flex items-center">
                     {post ? (
                       post.author.avatar ? (
